@@ -7,7 +7,7 @@ import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Component;
 
-import com.example.foodapi.model.Cozinha;
+import com.example.foodapi.domain.model.Cozinha;
 
 @Component
 public class CadastroCozinha {

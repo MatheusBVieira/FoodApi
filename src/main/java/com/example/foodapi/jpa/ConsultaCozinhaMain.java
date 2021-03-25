@@ -7,7 +7,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 
 import com.example.foodapi.FoodApiApplication;
-import com.example.foodapi.model.Cozinha;
+import com.example.foodapi.domain.model.Cozinha;
 
 public class ConsultaCozinhaMain {
 
