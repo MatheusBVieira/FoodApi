@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,8 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.foodapi.domain.exception.EntidadeEmUsoException;
+import com.example.foodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.example.foodapi.domain.model.Cozinha;
 import com.example.foodapi.domain.repository.CozinhaRepository;
+import com.example.foodapi.domain.service.CozinhaService;
 
 @RestController
 @RequestMapping("/cozinhas")
@@ -26,6 +28,9 @@ public class CozinhaController {
 
 	@Autowired
 	private CozinhaRepository cozinhaRepository;
+	
+	@Autowired
+	private CozinhaService cozinhaService;
 	
 	@GetMapping
 	public List<Cozinha> listar() {
@@ -55,7 +60,6 @@ public class CozinhaController {
 		Cozinha cozinhaAtual = cozinhaRepository.buscar(cozinhaId);
 		
 		if (cozinhaAtual != null) {
-//			cozinhaAtual.setNome(cozinha.getNome());
 			BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
 			
 			cozinhaAtual = cozinhaRepository.salvar(cozinhaAtual);
@@ -68,16 +72,12 @@ public class CozinhaController {
 	@DeleteMapping("/{cozinhaId}")
 	public ResponseEntity<Cozinha> remover(@PathVariable Long cozinhaId) {
 		try {
-			Cozinha cozinha = cozinhaRepository.buscar(cozinhaId);
+			cozinhaService.excluir(cozinhaId);
 			
-			if (cozinha != null) {
-				cozinhaRepository.remover(cozinha);
-				
-				return ResponseEntity.noContent().build();
-			}
-			
+			return ResponseEntity.noContent().build();
+		} catch (EntidadeNaoEncontradaException e) {
 			return ResponseEntity.notFound().build();
-		} catch (DataIntegrityViolationException e) { //Da erro se essa cozinha estiver relacionada com algum restaurante
+		} catch (EntidadeEmUsoException e) { 
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
 		}
 	}
