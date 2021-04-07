@@ -11,11 +11,9 @@ import com.example.foodapi.domain.model.Cozinha;
 @Repository
 public interface CozinhaRepository extends JpaRepository<Cozinha, Long> {
 
-	List<Cozinha> FindByNome(String nome);
-
-	List<Cozinha> FindByNomeContaining(String nome); // LIKE sql
-
+	List<Cozinha> findTodasByNomeContaining(String nome);
+	
 	Optional<Cozinha> findByNome(String nome);
-
-	boolean existsByNome(String nome);
+	
+	boolean existsByNome(String nome);;
 }
