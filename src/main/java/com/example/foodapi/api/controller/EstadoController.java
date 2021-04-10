@@ -2,6 +2,8 @@ package com.example.foodapi.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,7 +29,7 @@ public class EstadoController {
 	private EstadoRepository estadoRepository;
 
 	@Autowired
-	private EstadoService cadastroEstado;
+	private EstadoService estadoService;
 
 	@GetMapping
 	public List<Estado> listar() {
@@ -36,28 +38,28 @@ public class EstadoController {
 
 	@GetMapping("/{estadoId}")
 	public Estado buscar(@PathVariable Long estadoId) {
-		return cadastroEstado.buscarOuFalhar(estadoId);
+		return estadoService.buscarOuFalhar(estadoId);
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Estado adicionar(@RequestBody Estado estado) {
-		return cadastroEstado.salvar(estado);
+	public Estado adicionar(@RequestBody @Valid Estado estado) {
+		return estadoService.salvar(estado);
 	}
 
 	@PutMapping("/{estadoId}")
-	public Estado atualizar(@PathVariable Long estadoId, @RequestBody Estado estado) {
-		Estado estadoAtual = cadastroEstado.buscarOuFalhar(estadoId);
+	public Estado atualizar(@PathVariable Long estadoId, @RequestBody @Valid Estado estado) {
+		Estado estadoAtual = estadoService.buscarOuFalhar(estadoId);
 
 		BeanUtils.copyProperties(estado, estadoAtual, "id");
 
-		return cadastroEstado.salvar(estadoAtual);
+		return estadoService.salvar(estadoAtual);
 	}
 
 	@DeleteMapping("/{estadoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long estadoId) {
-		cadastroEstado.excluir(estadoId);
+		estadoService.excluir(estadoId);
 	}
 
 }
