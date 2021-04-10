@@ -23,7 +23,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Cozinha {
 
-	@NotNull(groups = Groups.CadastroRestaurante.class) 
+	@NotNull(groups = Groups.CozinhaId.class) 
 	@EqualsAndHashCode.Include //Colocando equals and hash apenas para o id 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
