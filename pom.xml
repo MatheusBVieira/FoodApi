@@ -60,7 +60,19 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
-
+		
+		<dependency>
+	    	<groupId>io.rest-assured</groupId>
+	    	<artifactId>rest-assured</artifactId>
+	    	<scope>test</scope>
+	    </dependency>
+		
+		<dependency>
+		    <groupId>junit</groupId>
+		    <artifactId>junit</artifactId>
+		    <scope>test</scope>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
@@ -95,6 +107,9 @@
 						</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-failsafe-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>

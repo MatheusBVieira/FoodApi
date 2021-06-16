@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 
@@ -26,7 +27,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.example.foodapi.core.validation.Groups;
-import com.example.foodapi.core.validation.Multiplo;
 import com.example.foodapi.core.validation.ValorZeroIncluiDescricao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -48,7 +48,8 @@ public class Restaurante {
 	@Column(nullable = false)
 	private String nome;
 
-	@Multiplo(numero = 5)
+	@NotNull
+	@PositiveOrZero
 	@Column(name = "taxa_frete", nullable = false)
 	private BigDecimal taxaFrete;
 
