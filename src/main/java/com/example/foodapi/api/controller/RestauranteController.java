@@ -20,6 +20,7 @@ import com.example.foodapi.api.assembler.RestauranteRequestDisassembler;
 import com.example.foodapi.api.assembler.RestauranteResponseAssembler;
 import com.example.foodapi.api.model.request.RestauranteRequest;
 import com.example.foodapi.api.model.response.RestauranteResponse;
+import com.example.foodapi.domain.exception.CidadeNaoEncontradaException;
 import com.example.foodapi.domain.exception.CozinhaNaoEncontradaException;
 import com.example.foodapi.domain.exception.NegocioException;
 import com.example.foodapi.domain.model.Restaurante;
@@ -61,7 +62,7 @@ public class RestauranteController {
 			Restaurante restaurante = restauranteRequestDisassembler.toDomainObject(restauranteRequest);
 			
 			return restauranteResponseAssembler.toModel(restauranteService.salvar(restaurante));
-		} catch (CozinhaNaoEncontradaException e) {
+		} catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage());
 		}
 	}
@@ -75,7 +76,7 @@ public class RestauranteController {
 			restauranteRequestDisassembler.copyToDomainObject(restauranteRequest, restauranteAtual);
 			
 			return restauranteResponseAssembler.toModel(restauranteService.salvar(restauranteAtual));
-		} catch (CozinhaNaoEncontradaException e) {
+		} catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage());
 		}
 	}

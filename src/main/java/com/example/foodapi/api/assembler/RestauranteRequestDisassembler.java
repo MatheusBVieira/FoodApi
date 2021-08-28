@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.example.foodapi.api.model.request.RestauranteRequest;
+import com.example.foodapi.domain.model.Cidade;
 import com.example.foodapi.domain.model.Cozinha;
 import com.example.foodapi.domain.model.Restaurante;
 
@@ -22,6 +23,10 @@ public class RestauranteRequestDisassembler {
 		// Para evitar org.hibernate.HibernateException: identifier of an instance of 
 		// com.algaworks.algafood.domain.model.Cozinha was altered from 1 to 2
 		restaurante.setCozinha(new Cozinha());
+		
+		if (restaurante.getEndereco() != null) {
+			restaurante.getEndereco().setCidade(new Cidade());
+		}
 		
 		modelMapper.map(restauranteRequest, restaurante);
 	}
