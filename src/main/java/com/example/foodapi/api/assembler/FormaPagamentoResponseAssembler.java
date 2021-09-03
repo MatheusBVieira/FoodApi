@@ -1,5 +1,6 @@
 package com.example.foodapi.api.assembler;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,7 +21,7 @@ public class FormaPagamentoResponseAssembler {
         return modelMapper.map(formaPagamento, FormaPagamentoResponse.class);
     }
     
-    public List<FormaPagamentoResponse> toCollectionModel(List<FormaPagamento> formasPagamentos) {
+    public List<FormaPagamentoResponse> toCollectionResponse(Collection<FormaPagamento> formasPagamentos) {
         return formasPagamentos.stream()
                 .map(formaPagamento -> toModel(formaPagamento))
                 .collect(Collectors.toList());

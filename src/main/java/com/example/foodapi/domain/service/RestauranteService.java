@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.example.foodapi.domain.exception.RestauranteNaoEncontradoException;
 import com.example.foodapi.domain.model.Cidade;
 import com.example.foodapi.domain.model.Cozinha;
+import com.example.foodapi.domain.model.FormaPagamento;
 import com.example.foodapi.domain.model.Restaurante;
 import com.example.foodapi.domain.repository.RestauranteRepository;
 
@@ -22,6 +23,9 @@ public class RestauranteService {
 	
 	@Autowired
 	private CidadeService cidadeService;
+	
+	@Autowired
+	private FormaPagamentoService formaPagamentoService;
 
 	@Transactional
 	public Restaurante salvar(Restaurante restaurante) {
@@ -54,6 +58,22 @@ public class RestauranteService {
 	public Restaurante buscarOuFalhar(Long restauranteId) {
 		return restauranteRepository.findById(restauranteId)
 			.orElseThrow(() -> new RestauranteNaoEncontradoException(restauranteId));
+	}
+	
+	@Transactional
+	public void desassociarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+		Restaurante restaurante = buscarOuFalhar(restauranteId);
+		FormaPagamento formaPagamento = formaPagamentoService.buscarOuFalhar(formaPagamentoId);
+		
+		restaurante.removerFormaPagamento(formaPagamento);
+	}
+	
+	@Transactional
+	public void associarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+		Restaurante restaurante = buscarOuFalhar(restauranteId);
+		FormaPagamento formaPagamento = formaPagamentoService.buscarOuFalhar(formaPagamentoId);
+		
+		restaurante.adicionarFormaPagamento(formaPagamento);
 	}
 
 }

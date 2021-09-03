@@ -44,7 +44,7 @@ public class FormaPagamentoController {
 	public List<FormaPagamentoResponse> listar() {
 		List<FormaPagamento> todasFormasPagamentos = formaPagamentoRepository.findAll();
 
-		return formaPagamentoResponseAssembler.toCollectionModel(todasFormasPagamentos);
+		return formaPagamentoResponseAssembler.toCollectionResponse(todasFormasPagamentos);
 	}
 
 	@GetMapping("/{formaPagamentoId}")
