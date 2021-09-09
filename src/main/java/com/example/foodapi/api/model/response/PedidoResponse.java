@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 public class PedidoResponse {
 
-    private Long id;
+    private Long codigo;
     private BigDecimal subtotal;
     private BigDecimal taxaFrete;
     private BigDecimal valorTotal;
