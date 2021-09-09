@@ -10,6 +10,7 @@ import com.example.foodapi.domain.model.Cidade;
 import com.example.foodapi.domain.model.Cozinha;
 import com.example.foodapi.domain.model.FormaPagamento;
 import com.example.foodapi.domain.model.Restaurante;
+import com.example.foodapi.domain.model.Usuario;
 import com.example.foodapi.domain.repository.RestauranteRepository;
 
 @Service
@@ -26,6 +27,9 @@ public class RestauranteService {
 	
 	@Autowired
 	private FormaPagamentoService formaPagamentoService;
+	
+	@Autowired
+	private UsuarioService usuarioService;
 
 	@Transactional
 	public Restaurante salvar(Restaurante restaurante) {
@@ -74,6 +78,22 @@ public class RestauranteService {
 		FormaPagamento formaPagamento = formaPagamentoService.buscarOuFalhar(formaPagamentoId);
 		
 		restaurante.adicionarFormaPagamento(formaPagamento);
+	}
+	
+	@Transactional
+	public void desassociarResponsavel(Long restauranteId, Long usuarioId) {
+	    Restaurante restaurante = buscarOuFalhar(restauranteId);
+	    Usuario usuario = usuarioService.buscarOuFalhar(usuarioId);
+	    
+	    restaurante.removerResponsavel(usuario);
+	}
+
+	@Transactional
+	public void associarResponsavel(Long restauranteId, Long usuarioId) {
+	    Restaurante restaurante = buscarOuFalhar(restauranteId);
+	    Usuario usuario = usuarioService.buscarOuFalhar(usuarioId);
+	    
+	    restaurante.adicionarResponsavel(usuario);
 	}
 	
 	@Transactional

@@ -45,7 +45,7 @@ public class UsuarioController {
     public List<UsuarioResponse> listar() {
         List<Usuario> todasUsuarios = usuarioRepository.findAll();
         
-        return usuarioResponseAssembler.toCollectionModel(todasUsuarios);
+        return usuarioResponseAssembler.toCollectionResponse(todasUsuarios);
     }
     
     @GetMapping("/{usuarioId}")
