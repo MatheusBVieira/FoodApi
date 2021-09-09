@@ -4,8 +4,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.example.foodapi.api.model.request.ItemPedidoRequest;
 import com.example.foodapi.api.model.response.EnderecoResponse;
 import com.example.foodapi.domain.model.Endereco;
+import com.example.foodapi.domain.model.ItemPedido;
 
 @Configuration
 public class ModelMapperConfig {
@@ -23,6 +25,9 @@ public class ModelMapperConfig {
 		enderecoToEnderecoResponseTypeMap.<String>addMapping(
 				enderecoSrc -> enderecoSrc.getCidade().getEstado().getNome(),
 				(enderecoResponseDest, value) -> enderecoResponseDest.getCidade().setEstado(value));
+		
+		modelMapper.createTypeMap(ItemPedidoRequest.class, ItemPedido.class)
+	    .addMappings(mapper -> mapper.skip(ItemPedido::setId));  
 		
 		return modelMapper;
 	}
