@@ -23,6 +23,7 @@ import com.example.foodapi.api.model.response.RestauranteResponse;
 import com.example.foodapi.domain.exception.CidadeNaoEncontradaException;
 import com.example.foodapi.domain.exception.CozinhaNaoEncontradaException;
 import com.example.foodapi.domain.exception.NegocioException;
+import com.example.foodapi.domain.exception.RestauranteNaoEncontradoException;
 import com.example.foodapi.domain.model.Restaurante;
 import com.example.foodapi.domain.repository.RestauranteRepository;
 import com.example.foodapi.domain.service.RestauranteService;
@@ -91,6 +92,26 @@ public class RestauranteController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void inativar(@PathVariable Long restauranteId) {
 		restauranteService.inativar(restauranteId);
+	}
+	
+	@PutMapping("/ativacoes")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void ativarMultiplos(@RequestBody List<Long> restauranteIds) {
+		try {
+			restauranteService.ativar(restauranteIds);
+		} catch (RestauranteNaoEncontradoException e) {
+			throw new NegocioException(e.getMessage(), e);
+		}
+	}
+	
+	@DeleteMapping("/ativacoes")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void inativarMultiplos(@RequestBody List<Long> restauranteIds) {
+		try {
+			restauranteService.inativar(restauranteIds);
+		} catch (RestauranteNaoEncontradoException e) {
+			throw new NegocioException(e.getMessage(), e);
+		}
 	}
 	
 	@PutMapping("/{restauranteId}/abertura")
