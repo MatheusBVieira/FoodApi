@@ -5,6 +5,10 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,16 +47,24 @@ public class PedidoController {
 	private PedidoResponseAssembler pedidoResponseAssembler;
 
 	@Autowired
-	private PedidoResumoResponseAssembler PedidoResumoResponseAssembler;
+	private PedidoResumoResponseAssembler pedidoResumoResponseAssembler;
 
 	@Autowired
 	private PedidoRequestDisassembler pedidoRequestDisassembler;
 
 	@GetMapping
-	public List<PedidoResumoResponse> pesquisar(PedidoFilter filtro) {
-		List<Pedido> todosPedidos = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro));
-
-		return PedidoResumoResponseAssembler.toCollectionResponse(todosPedidos);
+	public Page<PedidoResumoResponse> pesquisar(PedidoFilter filtro, 
+	        @PageableDefault(size = 10) Pageable pageable) {
+	    Page<Pedido> pedidosPage = pedidoRepository.findAll(
+	            PedidoSpecs.usandoFiltro(filtro), pageable);
+	    
+	    List<PedidoResumoResponse> pedidosResumoResponse = pedidoResumoResponseAssembler
+	            .toCollectionResponse(pedidosPage.getContent());
+	    
+	    Page<PedidoResumoResponse> pedidosResumoResponsePage = new PageImpl<>(
+	            pedidosResumoResponse, pageable, pedidosPage.getTotalElements());
+	    
+	    return pedidosResumoResponsePage;
 	}
 
 	@GetMapping("/{codigoPedido}")
