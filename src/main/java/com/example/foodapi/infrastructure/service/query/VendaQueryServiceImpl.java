@@ -1,4 +1,4 @@
-package com.example.foodapi.infrastructure.service;
+package com.example.foodapi.infrastructure.service.query;
 
 import java.util.ArrayList;
 import java.util.Date;
