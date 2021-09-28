@@ -1,6 +1,7 @@
 package com.example.foodapi.api.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -33,7 +34,6 @@ import com.example.foodapi.domain.repository.PedidoRepository;
 import com.example.foodapi.domain.repository.filter.PedidoFilter;
 import com.example.foodapi.domain.service.EmissaoPedidoService;
 import com.example.foodapi.infrastructure.repository.spec.PedidoSpecs;
-import com.google.common.collect.ImmutableMap;
 
 @RestController
 @RequestMapping(value = "/pedidos")
@@ -97,11 +97,16 @@ public class PedidoController {
 	}
 	
 	private Pageable traduzirPageable(Pageable apiPageable) {
-		var mapeamento = ImmutableMap.of(
+		var mapeamento = Map.of(
 				"codigo", "codigo",
+				"subtotal", "subtotal",
+				"taxaFrete", "taxaFrete",
+				"valorTotal", "valorTotal",
+				"dataCriacao", "dataCriacao",
 				"restaurante.nome", "restaurante.nome",
-				"nomeCliente", "cliente.nome",
-				"valorTotal", "valorTotal"
+				"restaurante.id", "restaurante.id",
+				"cliente.id", "cliente.id",
+				"cliente.nome", "cliente.nome"
 			);
 		
 		return PageableTranslator.translate(apiPageable, mapeamento);
