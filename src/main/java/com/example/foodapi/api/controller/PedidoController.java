@@ -24,6 +24,7 @@ import com.example.foodapi.api.assembler.PedidoResumoResponseAssembler;
 import com.example.foodapi.api.model.request.PedidoRequest;
 import com.example.foodapi.api.model.response.PedidoResponse;
 import com.example.foodapi.api.model.response.PedidoResumoResponse;
+import com.example.foodapi.core.data.PageableTranslator;
 import com.example.foodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.example.foodapi.domain.exception.NegocioException;
 import com.example.foodapi.domain.model.Pedido;
@@ -32,6 +33,7 @@ import com.example.foodapi.domain.repository.PedidoRepository;
 import com.example.foodapi.domain.repository.filter.PedidoFilter;
 import com.example.foodapi.domain.service.EmissaoPedidoService;
 import com.example.foodapi.infrastructure.repository.spec.PedidoSpecs;
+import com.google.common.collect.ImmutableMap;
 
 @RestController
 @RequestMapping(value = "/pedidos")
@@ -55,6 +57,8 @@ public class PedidoController {
 	@GetMapping
 	public Page<PedidoResumoResponse> pesquisar(PedidoFilter filtro, 
 	        @PageableDefault(size = 10) Pageable pageable) {
+		pageable = traduzirPageable(pageable);
+		
 	    Page<Pedido> pedidosPage = pedidoRepository.findAll(
 	            PedidoSpecs.usandoFiltro(filtro), pageable);
 	    
@@ -90,6 +94,17 @@ public class PedidoController {
 		} catch (EntidadeNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}
+	}
+	
+	private Pageable traduzirPageable(Pageable apiPageable) {
+		var mapeamento = ImmutableMap.of(
+				"codigo", "codigo",
+				"restaurante.nome", "restaurante.nome",
+				"nomeCliente", "cliente.nome",
+				"valorTotal", "valorTotal"
+			);
+		
+		return PageableTranslator.translate(apiPageable, mapeamento);
 	}
 
 }
