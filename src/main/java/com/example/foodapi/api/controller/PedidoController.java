@@ -28,10 +28,10 @@ import com.example.foodapi.api.model.response.PedidoResumoResponse;
 import com.example.foodapi.core.data.PageableTranslator;
 import com.example.foodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.example.foodapi.domain.exception.NegocioException;
+import com.example.foodapi.domain.filter.PedidoFilter;
 import com.example.foodapi.domain.model.Pedido;
 import com.example.foodapi.domain.model.Usuario;
 import com.example.foodapi.domain.repository.PedidoRepository;
-import com.example.foodapi.domain.repository.filter.PedidoFilter;
 import com.example.foodapi.domain.service.EmissaoPedidoService;
 import com.example.foodapi.infrastructure.repository.spec.PedidoSpecs;
 
