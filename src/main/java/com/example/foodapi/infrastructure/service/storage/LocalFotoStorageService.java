@@ -4,13 +4,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
 import com.example.foodapi.core.storage.StorageProperties;
 import com.example.foodapi.domain.service.FotoStorageService;
 
-@Service
 public class LocalFotoStorageService implements FotoStorageService {
 
 	@Autowired

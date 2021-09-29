@@ -12,7 +12,6 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.foodapi.core.storage.StorageProperties;
 import com.example.foodapi.domain.service.FotoStorageService;
 
-//@Service
 public class S3FotoStorageService implements FotoStorageService {
 
 	@Autowired
