@@ -1,5 +1,6 @@
 package com.example.foodapi.api.controller;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.filter.ShallowEtagHeaderFilter;
 
 import com.example.foodapi.api.assembler.FormaPagamentoRequestDisassembler;
 import com.example.foodapi.api.assembler.FormaPagamentoResponseAssembler;
@@ -44,24 +47,56 @@ public class FormaPagamentoController {
 	private FormaPagamentoRequestDisassembler formaPagamentoRequestDisassembler;
 
 	@GetMapping
-	public ResponseEntity<List<FormaPagamentoResponse>> listar() {
+	public ResponseEntity<List<FormaPagamentoResponse>> listar(ServletWebRequest request) {
+		ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
+		
+		String eTag = "0";
+		
+		OffsetDateTime dataUltimaAtualizacao = formaPagamentoRepository.getDataUltimaAtualizacao();
+		
+		if (dataUltimaAtualizacao != null) {
+			eTag = String.valueOf(dataUltimaAtualizacao.toEpochSecond());
+		}
+		
+		if (request.checkNotModified(eTag)) {
+			return null;
+		}
+		
 		List<FormaPagamento> todasFormasPagamentos = formaPagamentoRepository.findAll();
 
 		List<FormaPagamentoResponse> formasPagamentoResponse = formaPagamentoResponseAssembler.toCollectionResponse(todasFormasPagamentos);
 		
 		return ResponseEntity.ok()
 				.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+				.eTag(eTag)
 				.body(formasPagamentoResponse);
 	}
 
 	@GetMapping("/{formaPagamentoId}")
-	public ResponseEntity<FormaPagamentoResponse> buscar(@PathVariable Long formaPagamentoId) {
+	public ResponseEntity<FormaPagamentoResponse> buscar(@PathVariable Long formaPagamentoId, 
+			ServletWebRequest request) {
+		ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
+		
+		String eTag = "0";
+		
+		OffsetDateTime dataAtualizacao = formaPagamentoRepository
+	            .getDataAtualizacaoById(formaPagamentoId);
+	    
+		if (dataAtualizacao != null) {
+	        eTag = String.valueOf(dataAtualizacao.toEpochSecond());
+	    }
+	    
+	    if (request.checkNotModified(eTag)) {
+	        return null;
+	    }
+		
 		FormaPagamento formaPagamento = formaPagamentoService.buscarOuFalhar(formaPagamentoId);
 
 		FormaPagamentoResponse formaPagamentoModel =  formaPagamentoResponseAssembler.toResponse(formaPagamento);
 		
 		return ResponseEntity.ok()
 			      .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+			      .eTag(eTag)
 			      .body(formaPagamentoModel);
 	}
 
