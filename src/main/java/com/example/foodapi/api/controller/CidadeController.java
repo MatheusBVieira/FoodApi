@@ -26,6 +26,9 @@ import com.example.foodapi.domain.model.Cidade;
 import com.example.foodapi.domain.repository.CidadeRepository;
 import com.example.foodapi.domain.service.CidadeService;
 
+import io.swagger.annotations.Api;
+
+@Api(tags = "Cidades")
 @RestController
 @RequestMapping(value = "/cidades")
 public class CidadeController {
