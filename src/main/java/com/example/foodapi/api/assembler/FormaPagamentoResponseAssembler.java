@@ -17,13 +17,13 @@ public class FormaPagamentoResponseAssembler {
 	@Autowired
     private ModelMapper modelMapper;
     
-    public FormaPagamentoResponse toModel(FormaPagamento formaPagamento) {
+    public FormaPagamentoResponse toResponse(FormaPagamento formaPagamento) {
         return modelMapper.map(formaPagamento, FormaPagamentoResponse.class);
     }
     
     public List<FormaPagamentoResponse> toCollectionResponse(Collection<FormaPagamento> formasPagamentos) {
         return formasPagamentos.stream()
-                .map(formaPagamento -> toModel(formaPagamento))
+                .map(formaPagamento -> toResponse(formaPagamento))
                 .collect(Collectors.toList());
     }
 	

@@ -1,11 +1,14 @@
 package com.example.foodapi.api.controller;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,17 +44,25 @@ public class FormaPagamentoController {
 	private FormaPagamentoRequestDisassembler formaPagamentoRequestDisassembler;
 
 	@GetMapping
-	public List<FormaPagamentoResponse> listar() {
+	public ResponseEntity<List<FormaPagamentoResponse>> listar() {
 		List<FormaPagamento> todasFormasPagamentos = formaPagamentoRepository.findAll();
 
-		return formaPagamentoResponseAssembler.toCollectionResponse(todasFormasPagamentos);
+		List<FormaPagamentoResponse> formasPagamentoResponse = formaPagamentoResponseAssembler.toCollectionResponse(todasFormasPagamentos);
+		
+		return ResponseEntity.ok()
+				.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+				.body(formasPagamentoResponse);
 	}
 
 	@GetMapping("/{formaPagamentoId}")
-	public FormaPagamentoResponse buscar(@PathVariable Long formaPagamentoId) {
+	public ResponseEntity<FormaPagamentoResponse> buscar(@PathVariable Long formaPagamentoId) {
 		FormaPagamento formaPagamento = formaPagamentoService.buscarOuFalhar(formaPagamentoId);
 
-		return formaPagamentoResponseAssembler.toModel(formaPagamento);
+		FormaPagamentoResponse formaPagamentoModel =  formaPagamentoResponseAssembler.toResponse(formaPagamento);
+		
+		return ResponseEntity.ok()
+			      .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+			      .body(formaPagamentoModel);
 	}
 
 	@PostMapping
@@ -61,7 +72,7 @@ public class FormaPagamentoController {
 
 		formaPagamento = formaPagamentoService.salvar(formaPagamento);
 
-		return formaPagamentoResponseAssembler.toModel(formaPagamento);
+		return formaPagamentoResponseAssembler.toResponse(formaPagamento);
 	}
 
 	@PutMapping("/{formaPagamentoId}")
@@ -73,7 +84,7 @@ public class FormaPagamentoController {
 
 		formaPagamentoAtual = formaPagamentoService.salvar(formaPagamentoAtual);
 
-		return formaPagamentoResponseAssembler.toModel(formaPagamentoAtual);
+		return formaPagamentoResponseAssembler.toResponse(formaPagamentoAtual);
 	}
 
 	@DeleteMapping("/{formaPagamentoId}")
