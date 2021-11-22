@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.foodapi.api.ResourceUriHelper;
 import com.example.foodapi.api.assembler.CidadeRequestDisassembler;
 import com.example.foodapi.api.assembler.CidadeResponseAssembler;
 import com.example.foodapi.api.model.request.CidadeRequest;
@@ -69,7 +70,11 @@ public class CidadeController implements CidadeControllerOpenApi {
 			
 			cidade = cidadeService.salvar(cidade);
 			
-			return cidadeModelAssembler.toModel(cidade);
+			CidadeResponse cidadeResponse = cidadeModelAssembler.toModel(cidade);
+			
+			ResourceUriHelper.addUriInResponseHeader(cidadeResponse.getId());
+			
+			return cidadeResponse;
 		} catch (EstadoNaoEncontradoException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}
