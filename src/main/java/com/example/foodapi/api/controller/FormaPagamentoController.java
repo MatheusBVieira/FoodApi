@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,13 +27,14 @@ import com.example.foodapi.api.assembler.FormaPagamentoRequestDisassembler;
 import com.example.foodapi.api.assembler.FormaPagamentoResponseAssembler;
 import com.example.foodapi.api.model.request.FormaPagamentoRequest;
 import com.example.foodapi.api.model.response.FormaPagamentoResponse;
+import com.example.foodapi.api.openapi.controller.FormaPagamentoControllerOpenApi;
 import com.example.foodapi.domain.model.FormaPagamento;
 import com.example.foodapi.domain.repository.FormaPagamentoRepository;
 import com.example.foodapi.domain.service.FormaPagamentoService;
 
 @RestController
-@RequestMapping("/formas-pagamento")
-public class FormaPagamentoController {
+@RequestMapping(path = "/formas-pagamento", produces = MediaType.APPLICATION_JSON_VALUE)
+public class FormaPagamentoController implements FormaPagamentoControllerOpenApi {
 
 	@Autowired
 	private FormaPagamentoRepository formaPagamentoRepository;
@@ -46,6 +48,7 @@ public class FormaPagamentoController {
 	@Autowired
 	private FormaPagamentoRequestDisassembler formaPagamentoRequestDisassembler;
 
+	@Override
 	@GetMapping
 	public ResponseEntity<List<FormaPagamentoResponse>> listar(ServletWebRequest request) {
 		ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
@@ -72,6 +75,7 @@ public class FormaPagamentoController {
 				.body(formasPagamentoResponse);
 	}
 
+	@Override
 	@GetMapping("/{formaPagamentoId}")
 	public ResponseEntity<FormaPagamentoResponse> buscar(@PathVariable Long formaPagamentoId, 
 			ServletWebRequest request) {
@@ -100,6 +104,7 @@ public class FormaPagamentoController {
 			      .body(formaPagamentoModel);
 	}
 
+	@Override
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public FormaPagamentoResponse adicionar(@RequestBody @Valid FormaPagamentoRequest formaPagamentoRequest) {
@@ -110,6 +115,7 @@ public class FormaPagamentoController {
 		return formaPagamentoResponseAssembler.toResponse(formaPagamento);
 	}
 
+	@Override
 	@PutMapping("/{formaPagamentoId}")
 	public FormaPagamentoResponse atualizar(@PathVariable Long formaPagamentoId,
 			@RequestBody @Valid FormaPagamentoRequest formaPagamentoRequest) {
@@ -122,6 +128,7 @@ public class FormaPagamentoController {
 		return formaPagamentoResponseAssembler.toResponse(formaPagamentoAtual);
 	}
 
+	@Override
 	@DeleteMapping("/{formaPagamentoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long formaPagamentoId) {

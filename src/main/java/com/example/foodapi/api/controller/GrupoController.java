@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,13 +21,14 @@ import com.example.foodapi.api.assembler.GrupoRequestDissasember;
 import com.example.foodapi.api.assembler.GrupoResponseAssembler;
 import com.example.foodapi.api.model.request.GrupoRequest;
 import com.example.foodapi.api.model.response.GrupoResponse;
+import com.example.foodapi.api.openapi.controller.GrupoControllerOpenApi;
 import com.example.foodapi.domain.model.Grupo;
 import com.example.foodapi.domain.repository.GrupoRepository;
 import com.example.foodapi.domain.service.GrupoService;
 
 @RestController
-@RequestMapping("/grupos")
-public class GrupoController {
+@RequestMapping(path = "/grupos", produces = MediaType.APPLICATION_JSON_VALUE)
+public class GrupoController implements GrupoControllerOpenApi {
 
     @Autowired
     private GrupoRepository grupoRepository;
@@ -40,21 +42,24 @@ public class GrupoController {
     @Autowired
     private GrupoRequestDissasember grupoRequestDisassembler;
     
-    @GetMapping
+    @Override
+	@GetMapping
     public List<GrupoResponse> listar() {
         List<Grupo> todosGrupos = grupoRepository.findAll();
         
         return GrupoResponseAssembler.toCollectionModel(todosGrupos);
     }
     
-    @GetMapping("/{grupoId}")
+    @Override
+	@GetMapping("/{grupoId}")
     public GrupoResponse buscar(@PathVariable Long grupoId) {
         Grupo grupo = grupoService.buscarOuFalhar(grupoId);
         
         return GrupoResponseAssembler.toResponse(grupo);
     }
     
-    @PostMapping
+    @Override
+	@PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public GrupoResponse adicionar(@RequestBody @Valid GrupoRequest grupoRequest) {
         Grupo grupo = grupoRequestDisassembler.toDomainObject(grupoRequest);
@@ -64,7 +69,8 @@ public class GrupoController {
         return GrupoResponseAssembler.toResponse(grupo);
     }
     
-    @PutMapping("/{grupoId}")
+    @Override
+	@PutMapping("/{grupoId}")
     public GrupoResponse atualizar(@PathVariable Long grupoId,
             @RequestBody @Valid GrupoRequest grupoRequest) {
         Grupo grupoAtual = grupoService.buscarOuFalhar(grupoId);
@@ -76,7 +82,8 @@ public class GrupoController {
         return GrupoResponseAssembler.toResponse(grupoAtual);
     }
     
-    @DeleteMapping("/{grupoId}")
+    @Override
+	@DeleteMapping("/{grupoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long grupoId) {
         grupoService.excluir(grupoId);	

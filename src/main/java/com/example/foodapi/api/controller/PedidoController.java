@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +26,7 @@ import com.example.foodapi.api.assembler.PedidoResumoResponseAssembler;
 import com.example.foodapi.api.model.request.PedidoRequest;
 import com.example.foodapi.api.model.response.PedidoResponse;
 import com.example.foodapi.api.model.response.PedidoResumoResponse;
+import com.example.foodapi.api.openapi.controller.PedidoControllerOpenApi;
 import com.example.foodapi.core.data.PageableTranslator;
 import com.example.foodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.example.foodapi.domain.exception.NegocioException;
@@ -36,8 +38,8 @@ import com.example.foodapi.domain.service.EmissaoPedidoService;
 import com.example.foodapi.infrastructure.repository.spec.PedidoSpecs;
 
 @RestController
-@RequestMapping(value = "/pedidos")
-public class PedidoController {
+@RequestMapping(path = "/pedidos", produces = MediaType.APPLICATION_JSON_VALUE)
+public class PedidoController implements PedidoControllerOpenApi {
 
 	@Autowired
 	private PedidoRepository pedidoRepository;
@@ -54,6 +56,7 @@ public class PedidoController {
 	@Autowired
 	private PedidoRequestDisassembler pedidoRequestDisassembler;
 
+	@Override
 	@GetMapping
 	public Page<PedidoResumoResponse> pesquisar(PedidoFilter filtro, 
 	        @PageableDefault(size = 10) Pageable pageable) {
@@ -71,6 +74,7 @@ public class PedidoController {
 	    return pedidosResumoResponsePage;
 	}
 
+	@Override
 	@GetMapping("/{codigoPedido}")
 	public PedidoResponse buscar(@PathVariable String codigoPedido) {
 		Pedido pedido = emissaoPedido.buscarOuFalhar(codigoPedido);
@@ -78,6 +82,7 @@ public class PedidoController {
 		return pedidoResponseAssembler.toResponse(pedido);
 	}
 
+	@Override
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public PedidoResponse adicionar(@Valid @RequestBody PedidoRequest pedidoRequest) {

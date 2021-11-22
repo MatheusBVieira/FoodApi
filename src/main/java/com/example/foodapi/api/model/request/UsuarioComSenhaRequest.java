@@ -2,6 +2,7 @@ package com.example.foodapi.api.model.request;
 
 import javax.validation.constraints.NotBlank;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +10,7 @@ import lombok.Setter;
 @Getter
 public class UsuarioComSenhaRequest extends UsuarioRequest {
 
-    @NotBlank
-    private String senha;
+	@ApiModelProperty(example = "123", required = true)
+	@NotBlank
+	private String senha;
 }

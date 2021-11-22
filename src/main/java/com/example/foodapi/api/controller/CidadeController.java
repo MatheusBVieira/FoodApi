@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,18 +21,16 @@ import com.example.foodapi.api.assembler.CidadeRequestDisassembler;
 import com.example.foodapi.api.assembler.CidadeResponseAssembler;
 import com.example.foodapi.api.model.request.CidadeRequest;
 import com.example.foodapi.api.model.response.CidadeResponse;
+import com.example.foodapi.api.openapi.controller.CidadeControllerOpenApi;
 import com.example.foodapi.domain.exception.EstadoNaoEncontradoException;
 import com.example.foodapi.domain.exception.NegocioException;
 import com.example.foodapi.domain.model.Cidade;
 import com.example.foodapi.domain.repository.CidadeRepository;
 import com.example.foodapi.domain.service.CidadeService;
 
-import io.swagger.annotations.Api;
-
-@Api(tags = "Cidades")
 @RestController
-@RequestMapping(value = "/cidades")
-public class CidadeController {
+@RequestMapping(path = "/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
+public class CidadeController implements CidadeControllerOpenApi {
 
 	@Autowired
 	private CidadeRepository cidadeRepository;
@@ -45,6 +44,7 @@ public class CidadeController {
 	@Autowired
 	private CidadeRequestDisassembler cidadeInputDisassembler;
 	
+	@Override
 	@GetMapping
 	public List<CidadeResponse> listar() {
 		List<Cidade> todasCidades = cidadeRepository.findAll();
@@ -52,6 +52,7 @@ public class CidadeController {
 		return cidadeModelAssembler.toCollectionModel(todasCidades);
 	}
 	
+	@Override
 	@GetMapping("/{cidadeId}")
 	public CidadeResponse buscar(@PathVariable Long cidadeId) {
 		Cidade cidade = cidadeService.buscarOuFalhar(cidadeId);
@@ -59,6 +60,7 @@ public class CidadeController {
 		return cidadeModelAssembler.toModel(cidade);
 	}
 	
+	@Override
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public CidadeResponse adicionar(@RequestBody @Valid CidadeRequest cidadeInput) {
@@ -73,6 +75,7 @@ public class CidadeController {
 		}
 	}
 	
+	@Override
 	@PutMapping("/{cidadeId}")
 	public CidadeResponse atualizar(@PathVariable Long cidadeId,
 			@RequestBody @Valid CidadeRequest cidadeInput) {
@@ -89,6 +92,7 @@ public class CidadeController {
 		}
 	}
 	
+	@Override
 	@DeleteMapping("/{cidadeId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long cidadeId) {

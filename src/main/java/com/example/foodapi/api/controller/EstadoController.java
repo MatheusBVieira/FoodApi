@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,13 +21,14 @@ import com.example.foodapi.api.assembler.EstadoRequestDisassembler;
 import com.example.foodapi.api.assembler.EstadoResponseAssembler;
 import com.example.foodapi.api.model.request.EstadoRequest;
 import com.example.foodapi.api.model.response.EstadoResponse;
+import com.example.foodapi.api.openapi.controller.EstadoControllerOpenApi;
 import com.example.foodapi.domain.model.Estado;
 import com.example.foodapi.domain.repository.EstadoRepository;
 import com.example.foodapi.domain.service.EstadoService;
 
 @RestController
-@RequestMapping("/estados")
-public class EstadoController {
+@RequestMapping(path = "/estados", produces = MediaType.APPLICATION_JSON_VALUE)
+public class EstadoController implements EstadoControllerOpenApi {
 
 	@Autowired
 	private EstadoRepository estadoRepository;
@@ -40,6 +42,7 @@ public class EstadoController {
 	@Autowired
 	private EstadoRequestDisassembler estadoRequestDisassembler;
 	
+	@Override
 	@GetMapping
 	public List<EstadoResponse> listar() {
 		List<Estado> todosEstados = estadoRepository.findAll();
@@ -47,6 +50,7 @@ public class EstadoController {
 		return estadoResponseAssembler.toCollectionModel(todosEstados);
 	}
 	
+	@Override
 	@GetMapping("/{estadoId}")
 	public EstadoResponse buscar(@PathVariable Long estadoId) {
 		Estado estado = estadoService.buscarOuFalhar(estadoId);
@@ -54,6 +58,7 @@ public class EstadoController {
 		return estadoResponseAssembler.toModel(estado);
 	}
 	
+	@Override
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public EstadoResponse adicionar(@RequestBody @Valid EstadoRequest estadoInput) {
@@ -64,6 +69,7 @@ public class EstadoController {
 		return estadoResponseAssembler.toModel(estado);
 	}
 	
+	@Override
 	@PutMapping("/{estadoId}")
 	public EstadoResponse atualizar(@PathVariable Long estadoId,
 			@RequestBody @Valid EstadoRequest estadoInput) {
@@ -76,6 +82,7 @@ public class EstadoController {
 		return estadoResponseAssembler.toModel(estadoAtual);
 	}
 	
+	@Override
 	@DeleteMapping("/{estadoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long estadoId) {

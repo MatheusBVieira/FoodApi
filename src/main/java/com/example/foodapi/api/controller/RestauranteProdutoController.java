@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ import com.example.foodapi.api.assembler.ProdutoRequestDissasembler;
 import com.example.foodapi.api.assembler.ProdutoResponseAssembler;
 import com.example.foodapi.api.model.request.ProdutoRequest;
 import com.example.foodapi.api.model.response.ProdutoResponse;
+import com.example.foodapi.api.openapi.controller.RestauranteProdutoControllerOpenApi;
 import com.example.foodapi.domain.model.Produto;
 import com.example.foodapi.domain.model.Restaurante;
 import com.example.foodapi.domain.repository.ProdutoRepository;
@@ -27,8 +29,8 @@ import com.example.foodapi.domain.service.ProdutoService;
 import com.example.foodapi.domain.service.RestauranteService;
 
 @RestController
-@RequestMapping("/restaurantes/{restauranteId}/produtos")
-public class RestauranteProdutoController {
+@RequestMapping(path = "/restaurantes/{restauranteId}/produtos", produces = MediaType.APPLICATION_JSON_VALUE)
+public class RestauranteProdutoController implements RestauranteProdutoControllerOpenApi {
 
     @Autowired
     private ProdutoRepository produtoRepository;
@@ -45,7 +47,8 @@ public class RestauranteProdutoController {
     @Autowired
     private ProdutoRequestDissasembler produtoRequestDisassembler;
     
-    @GetMapping
+    @Override
+	@GetMapping
 	public List<ProdutoResponse> listar(@PathVariable Long restauranteId,
 			@RequestParam(required = false) boolean incluirInativos) {
 		Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
@@ -56,14 +59,16 @@ public class RestauranteProdutoController {
 		return produtoResponseAssembler.toCollectionModel(todosProdutos);
 	}
     
-    @GetMapping("/{produtoId}")
+    @Override
+	@GetMapping("/{produtoId}")
     public ProdutoResponse buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
         Produto produto = cadastroProduto.buscarOuFalhar(restauranteId, produtoId);
         
         return produtoResponseAssembler.toResponse(produto);
     }
     
-    @PostMapping
+    @Override
+	@PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProdutoResponse adicionar(@PathVariable Long restauranteId,
             @RequestBody @Valid ProdutoRequest produtoRequest) {
@@ -77,7 +82,8 @@ public class RestauranteProdutoController {
         return produtoResponseAssembler.toResponse(produto);
     }
     
-    @PutMapping("/{produtoId}")
+    @Override
+	@PutMapping("/{produtoId}")
     public ProdutoResponse atualizar(@PathVariable Long restauranteId, @PathVariable Long produtoId,
             @RequestBody @Valid ProdutoRequest produtoRequest) {
         Produto produtoAtual = cadastroProduto.buscarOuFalhar(restauranteId, produtoId);

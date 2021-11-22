@@ -1,5 +1,6 @@
 package com.example.foodapi.api.model.response;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,7 +8,13 @@ import lombok.Setter;
 @Getter
 public class PermissaoResponse {
 
-    private Long id;
-    private String nome;
-    private String descricao;	
+	@ApiModelProperty(example = "1")
+	private Long id;
+
+	@ApiModelProperty(example = "CONSULTAR_COZINHAS")
+	private String nome;
+
+	@ApiModelProperty(example = "Permite consultar cozinhas")
+	private String descricao;	
+	
 }

@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,13 +25,14 @@ import com.example.foodapi.api.assembler.CozinhaRequestDisassembler;
 import com.example.foodapi.api.assembler.CozinhaResponseAssembler;
 import com.example.foodapi.api.model.request.CozinhaRequest;
 import com.example.foodapi.api.model.response.CozinhaResponse;
+import com.example.foodapi.api.openapi.controller.CozinhaControllerOpenApi;
 import com.example.foodapi.domain.model.Cozinha;
 import com.example.foodapi.domain.repository.CozinhaRepository;
 import com.example.foodapi.domain.service.CozinhaService;
 
 @RestController
-@RequestMapping("/cozinhas")
-public class CozinhaController {
+@RequestMapping(value = "/cozinhas", produces = MediaType.APPLICATION_JSON_VALUE)
+public class CozinhaController implements CozinhaControllerOpenApi {
 
 	@Autowired
 	private CozinhaRepository cozinhaRepository;
@@ -44,6 +46,7 @@ public class CozinhaController {
 	@Autowired
 	private CozinhaRequestDisassembler cozinhaInputDisassembler;
 	
+	@Override
 	@GetMapping
 	public Page<CozinhaResponse> listar(@PageableDefault(size = 10) Pageable pageable) {
 		Page<Cozinha> cozinhasPage = cozinhaRepository.findAll(pageable);
@@ -57,6 +60,7 @@ public class CozinhaController {
 		return cozinhasResponsePage;
 	}
 	
+	@Override
 	@GetMapping("/{cozinhaId}")
 	public CozinhaResponse buscar(@PathVariable Long cozinhaId) {
 		Cozinha cozinha = cadastroCozinha.buscarOuFalhar(cozinhaId);
@@ -64,6 +68,7 @@ public class CozinhaController {
 		return cozinhaModelAssembler.toModel(cozinha);
 	}
 	
+	@Override
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public CozinhaResponse adicionar(@RequestBody @Valid CozinhaRequest cozinhaRequest) {
@@ -73,6 +78,7 @@ public class CozinhaController {
 		return cozinhaModelAssembler.toModel(cozinha);
 	}
 	
+	@Override
 	@PutMapping("/{cozinhaId}")
 	public CozinhaResponse atualizar(@PathVariable Long cozinhaId,
 			@RequestBody @Valid CozinhaRequest cozinhaRequest) {
@@ -83,6 +89,7 @@ public class CozinhaController {
 		return cozinhaModelAssembler.toModel(cozinhaAtual);
 	}
 	
+	@Override
 	@DeleteMapping("/{cozinhaId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long cozinhaId) {

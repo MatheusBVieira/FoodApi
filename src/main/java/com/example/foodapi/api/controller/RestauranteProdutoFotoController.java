@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.foodapi.api.assembler.FotoProdutoResponseAssembler;
 import com.example.foodapi.api.model.request.FotoProdutoRequest;
 import com.example.foodapi.api.model.response.FotoProdutoResponse;
+import com.example.foodapi.api.openapi.controller.RestauranteProdutoFotoControllerOpenApi;
 import com.example.foodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.example.foodapi.domain.model.FotoProduto;
 import com.example.foodapi.domain.model.Produto;
@@ -35,8 +37,8 @@ import com.example.foodapi.domain.service.ProdutoService;
 
 
 @RestController
-@RequestMapping("/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
-public class RestauranteProdutoFotoController {
+@RequestMapping(path = "/restaurantes/{restauranteId}/produtos/{produtoId}/foto", produces = MediaType.APPLICATION_JSON_VALUE)
+public class RestauranteProdutoFotoController implements RestauranteProdutoFotoControllerOpenApi {
 
 	@Autowired
 	private ProdutoService produtoService;
@@ -50,12 +52,14 @@ public class RestauranteProdutoFotoController {
 	@Autowired
 	private FotoProdutoResponseAssembler fotoProdutoResponseAssembler;
 	
+	@Override
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public FotoProdutoResponse atualizarFoto(@PathVariable Long restauranteId,
-			@PathVariable Long produtoId, @Valid FotoProdutoRequest fotoProdutoRequest) throws IOException {
+			@PathVariable Long produtoId, @Valid FotoProdutoRequest fotoProdutoRequest,
+			@RequestPart(required = true) MultipartFile arquivo) throws IOException {
 		Produto produto = produtoService.buscarOuFalhar(restauranteId, produtoId);
 		
-		MultipartFile arquivo = fotoProdutoRequest.getArquivo();
+//		MultipartFile arquivo = fotoProdutoRequest.getArquivo();
 		
 		FotoProduto foto = new FotoProduto();
 		foto.setProduto(produto);
@@ -69,7 +73,8 @@ public class RestauranteProdutoFotoController {
 		return fotoProdutoResponseAssembler.toResponse(fotoSalva);
 	}
 	
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@Override
+	@GetMapping()
 	public FotoProdutoResponse buscar(@PathVariable Long restauranteId, 
 			@PathVariable Long produtoId) {
 		FotoProduto fotoProduto = catalogoFotoProduto.buscarOuFalhar(restauranteId, produtoId);
@@ -77,7 +82,8 @@ public class RestauranteProdutoFotoController {
 		return fotoProdutoResponseAssembler.toResponse(fotoProduto);
 	}
 	
-	@GetMapping
+	@Override
+	@GetMapping(produces = MediaType.ALL_VALUE)
 	public ResponseEntity<?> servir(@PathVariable Long restauranteId, 
 			@PathVariable Long produtoId, @RequestHeader(name = "accept") String acceptHeader) 
 					throws HttpMediaTypeNotAcceptableException {
@@ -106,6 +112,7 @@ public class RestauranteProdutoFotoController {
 		}
 	}
 	
+	@Override
 	@DeleteMapping
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void excluir(@PathVariable Long restauranteId, 
