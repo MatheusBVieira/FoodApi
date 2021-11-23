@@ -1,13 +1,11 @@
 package com.example.foodapi.api.controller;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,84 +36,72 @@ public class CidadeController implements CidadeControllerOpenApi {
 
 	@Autowired
 	private CidadeRepository cidadeRepository;
-	
+
 	@Autowired
 	private CidadeService cidadeService;
-	
+
 	@Autowired
 	private CidadeResponseAssembler cidadeResponseAssembler;
-	
+
 	@Autowired
 	private CidadeRequestDisassembler cidadeInputDisassembler;
-	
+
 	@Override
 	@GetMapping
-	public List<CidadeResponse> listar() {
+	public CollectionModel<CidadeResponse> listar() {
 		List<Cidade> todasCidades = cidadeRepository.findAll();
-		
+
 		return cidadeResponseAssembler.toCollectionModel(todasCidades);
 	}
-	
+
 	@Override
 	@GetMapping("/{cidadeId}")
 	public CidadeResponse buscar(@PathVariable Long cidadeId) {
 		Cidade cidade = cidadeService.buscarOuFalhar(cidadeId);
 		
-		CidadeResponse cidadeResponse = cidadeResponseAssembler.toResponse(cidade);
-		
-		cidadeResponse.add(linkTo(methodOn(CidadeController.class)
-				.buscar(cidadeResponse.getId())).withSelfRel());
-		
-		cidadeResponse.add(linkTo(methodOn(CidadeController.class)
-				.listar()).withRel("cidades"));
-		
-		cidadeResponse.getEstado().add(linkTo(methodOn(EstadoController.class)
-				.buscar(cidadeResponse.getEstado().getId())).withSelfRel());
-		
-		return cidadeResponse;
+		return cidadeResponseAssembler.toModel(cidade);
 	}
-	
+
 	@Override
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public CidadeResponse adicionar(@RequestBody @Valid CidadeRequest cidadeInput) {
 		try {
 			Cidade cidade = cidadeInputDisassembler.toDomainObject(cidadeInput);
-			
+
 			cidade = cidadeService.salvar(cidade);
-			
-			CidadeResponse cidadeResponse = cidadeResponseAssembler.toResponse(cidade);
-			
+
+			CidadeResponse cidadeResponse = cidadeResponseAssembler.toModel(cidade);
+
 			ResourceUriHelper.addUriInResponseHeader(cidadeResponse.getId());
-			
+
 			return cidadeResponse;
 		} catch (EstadoNaoEncontradoException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}
 	}
-	
+
 	@Override
 	@PutMapping("/{cidadeId}")
-	public CidadeResponse atualizar(@PathVariable Long cidadeId,
-			@RequestBody @Valid CidadeRequest cidadeInput) {
+	public CidadeResponse atualizar(@PathVariable Long cidadeId, @RequestBody @Valid CidadeRequest cidadeInput) {
 		try {
 			Cidade cidadeAtual = cidadeService.buscarOuFalhar(cidadeId);
-			
+
 			cidadeInputDisassembler.copyToDomainObject(cidadeInput, cidadeAtual);
-			
+
 			cidadeAtual = cidadeService.salvar(cidadeAtual);
-			
-			return cidadeResponseAssembler.toResponse(cidadeAtual);
+
+			return cidadeResponseAssembler.toModel(cidadeAtual);
 		} catch (EstadoNaoEncontradoException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}
 	}
-	
+
 	@Override
 	@DeleteMapping("/{cidadeId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long cidadeId) {
-		cidadeService.excluir(cidadeId);	
+		cidadeService.excluir(cidadeId);
 	}
 
 }
