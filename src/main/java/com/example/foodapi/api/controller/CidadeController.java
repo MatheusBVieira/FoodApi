@@ -1,6 +1,7 @@
 package com.example.foodapi.api.controller;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.List;
 
@@ -62,20 +63,14 @@ public class CidadeController implements CidadeControllerOpenApi {
 		
 		CidadeResponse cidadeResponse = cidadeResponseAssembler.toResponse(cidade);
 		
-		cidadeResponse.add(linkTo(CidadeController.class)
-				.slash(cidadeResponse.getId()).withSelfRel());
+		cidadeResponse.add(linkTo(methodOn(CidadeController.class)
+				.buscar(cidadeResponse.getId())).withSelfRel());
 		
-//		cidadeResponse.add(Link.of("http://api.algafood.local:8080/cidades/1"));
+		cidadeResponse.add(linkTo(methodOn(CidadeController.class)
+				.listar()).withRel("cidades"));
 		
-		cidadeResponse.add(linkTo(CidadeController.class)
-				.withRel("cidades"));
-		
-//		cidadeResponse.add(Link.of("http://api.algafood.local:8080/cidades", "cidades"));
-		
-		cidadeResponse.getEstado().add(linkTo(EstadoController.class)
-				.slash(cidadeResponse.getEstado().getId()).withSelfRel());
-		
-//		cidadeResponse.getEstado().add(Link.of("http://api.algafood.local:8080/estados/1"));
+		cidadeResponse.getEstado().add(linkTo(methodOn(EstadoController.class)
+				.buscar(cidadeResponse.getEstado().getId())).withSelfRel());
 		
 		return cidadeResponse;
 	}
