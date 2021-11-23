@@ -1,6 +1,6 @@
 package com.example.foodapi.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import com.example.foodapi.api.exceptionhandler.Problem;
 import com.example.foodapi.api.model.request.EstadoRequest;
@@ -16,7 +16,7 @@ import io.swagger.annotations.ApiResponses;
 public interface EstadoControllerOpenApi {
 
     @ApiOperation("Lista os estados")
-    List<EstadoResponse> listar();
+    CollectionModel<EstadoResponse> listar();
 
     @ApiOperation("Busca um estado por ID")
     @ApiResponses({
