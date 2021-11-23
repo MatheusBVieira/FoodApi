@@ -1,8 +1,7 @@
 package com.example.foodapi.api.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,10 +29,10 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
     
     @Override
 	@GetMapping
-    public List<UsuarioResponse> listar(@PathVariable Long restauranteId) {
+    public CollectionModel<UsuarioResponse> listar(@PathVariable Long restauranteId) {
         Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
         
-        return usuarioModelAssembler.toCollectionResponse(restaurante.getResponsaveis());
+        return usuarioModelAssembler.toCollectionModel(restaurante.getResponsaveis());
     }
     
     @Override

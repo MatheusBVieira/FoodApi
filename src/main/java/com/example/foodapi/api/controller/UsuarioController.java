@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,10 +46,10 @@ public class UsuarioController implements UsuarioControllerOpenApi {
     
     @Override
 	@GetMapping
-    public List<UsuarioResponse> listar() {
+    public CollectionModel<UsuarioResponse> listar() {
         List<Usuario> todasUsuarios = usuarioRepository.findAll();
         
-        return usuarioResponseAssembler.toCollectionResponse(todasUsuarios);
+        return usuarioResponseAssembler.toCollectionModel(todasUsuarios);
     }
     
     @Override
@@ -56,7 +57,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
     public UsuarioResponse buscar(@PathVariable Long usuarioId) {
         Usuario usuario = usuarioService.buscarOuFalhar(usuarioId);
         
-        return usuarioResponseAssembler.toResponse(usuario);
+        return usuarioResponseAssembler.toModel(usuario);
     }
     
     @Override
@@ -66,7 +67,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
         Usuario usuario = usuarioRequestDisassembler.toDomainObject(usuarioRequest);
         usuario = usuarioService.salvar(usuario);
         
-        return usuarioResponseAssembler.toResponse(usuario);
+        return usuarioResponseAssembler.toModel(usuario);
     }
     
     @Override
@@ -77,7 +78,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
         usuarioRequestDisassembler.copyToDomainObject(usuarioRequest, usuarioAtual);
         usuarioAtual = usuarioService.salvar(usuarioAtual);
         
-        return usuarioResponseAssembler.toResponse(usuarioAtual);
+        return usuarioResponseAssembler.toModel(usuarioAtual);
     }
     
     @Override

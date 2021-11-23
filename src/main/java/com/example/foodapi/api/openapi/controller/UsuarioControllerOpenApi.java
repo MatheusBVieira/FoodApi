@@ -1,6 +1,6 @@
 package com.example.foodapi.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import com.example.foodapi.api.exceptionhandler.Problem;
 import com.example.foodapi.api.model.request.SenhaRequest;
@@ -18,7 +18,7 @@ import io.swagger.annotations.ApiResponses;
 public interface UsuarioControllerOpenApi {
 
     @ApiOperation("Lista os usuários")
-    List<UsuarioResponse> listar();
+    CollectionModel<UsuarioResponse> listar();
 
     @ApiOperation("Busca um usuário por ID")
     @ApiResponses({

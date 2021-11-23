@@ -1,6 +1,6 @@
 package com.example.foodapi.api.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import com.example.foodapi.api.exceptionhandler.Problem;
 import com.example.foodapi.api.model.response.UsuarioResponse;
@@ -18,7 +18,7 @@ public interface RestauranteUsuarioResponsavelControllerOpenApi {
     @ApiResponses({
         @ApiResponse(code = 404, message = "Restaurante não encontrado", response = Problem.class)
     })
-    List<UsuarioResponse> listar(
+    CollectionModel<UsuarioResponse> listar(
             @ApiParam(value = "ID do restaurante", example = "1", required = true)
             Long restauranteId);
 
