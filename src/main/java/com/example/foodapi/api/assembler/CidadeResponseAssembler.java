@@ -16,13 +16,13 @@ public class CidadeResponseAssembler {
 	@Autowired
 	private ModelMapper modelMapper;
 	
-	public CidadeResponse toModel(Cidade cidade) {
+	public CidadeResponse toResponse(Cidade cidade) {
 		return modelMapper.map(cidade, CidadeResponse.class);
 	}
 	
 	public List<CidadeResponse> toCollectionModel(List<Cidade> cidades) {
 		return cidades.stream()
-				.map(cidade -> toModel(cidade))
+				.map(cidade -> toResponse(cidade))
 				.collect(Collectors.toList());
 	}
 	

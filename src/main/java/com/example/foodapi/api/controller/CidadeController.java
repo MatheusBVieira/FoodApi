@@ -1,5 +1,7 @@
 package com.example.foodapi.api.controller;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+
 import java.util.List;
 
 import javax.validation.Valid;
@@ -40,7 +42,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 	private CidadeService cidadeService;
 	
 	@Autowired
-	private CidadeResponseAssembler cidadeModelAssembler;
+	private CidadeResponseAssembler cidadeResponseAssembler;
 	
 	@Autowired
 	private CidadeRequestDisassembler cidadeInputDisassembler;
@@ -50,7 +52,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 	public List<CidadeResponse> listar() {
 		List<Cidade> todasCidades = cidadeRepository.findAll();
 		
-		return cidadeModelAssembler.toCollectionModel(todasCidades);
+		return cidadeResponseAssembler.toCollectionModel(todasCidades);
 	}
 	
 	@Override
@@ -58,7 +60,24 @@ public class CidadeController implements CidadeControllerOpenApi {
 	public CidadeResponse buscar(@PathVariable Long cidadeId) {
 		Cidade cidade = cidadeService.buscarOuFalhar(cidadeId);
 		
-		return cidadeModelAssembler.toModel(cidade);
+		CidadeResponse cidadeResponse = cidadeResponseAssembler.toResponse(cidade);
+		
+		cidadeResponse.add(linkTo(CidadeController.class)
+				.slash(cidadeResponse.getId()).withSelfRel());
+		
+//		cidadeResponse.add(Link.of("http://api.algafood.local:8080/cidades/1"));
+		
+		cidadeResponse.add(linkTo(CidadeController.class)
+				.withRel("cidades"));
+		
+//		cidadeResponse.add(Link.of("http://api.algafood.local:8080/cidades", "cidades"));
+		
+		cidadeResponse.getEstado().add(linkTo(EstadoController.class)
+				.slash(cidadeResponse.getEstado().getId()).withSelfRel());
+		
+//		cidadeResponse.getEstado().add(Link.of("http://api.algafood.local:8080/estados/1"));
+		
+		return cidadeResponse;
 	}
 	
 	@Override
@@ -70,7 +89,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 			
 			cidade = cidadeService.salvar(cidade);
 			
-			CidadeResponse cidadeResponse = cidadeModelAssembler.toModel(cidade);
+			CidadeResponse cidadeResponse = cidadeResponseAssembler.toResponse(cidade);
 			
 			ResourceUriHelper.addUriInResponseHeader(cidadeResponse.getId());
 			
@@ -91,7 +110,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 			
 			cidadeAtual = cidadeService.salvar(cidadeAtual);
 			
-			return cidadeModelAssembler.toModel(cidadeAtual);
+			return cidadeResponseAssembler.toResponse(cidadeAtual);
 		} catch (EstadoNaoEncontradoException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}
