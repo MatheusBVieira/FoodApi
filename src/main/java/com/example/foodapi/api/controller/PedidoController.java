@@ -1,15 +1,15 @@
 package com.example.foodapi.api.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +27,7 @@ import com.example.foodapi.api.model.request.PedidoRequest;
 import com.example.foodapi.api.model.response.PedidoResponse;
 import com.example.foodapi.api.model.response.PedidoResumoResponse;
 import com.example.foodapi.api.openapi.controller.PedidoControllerOpenApi;
+import com.example.foodapi.core.data.PageWrapper;
 import com.example.foodapi.core.data.PageableTranslator;
 import com.example.foodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.example.foodapi.domain.exception.NegocioException;
@@ -55,23 +56,22 @@ public class PedidoController implements PedidoControllerOpenApi {
 
 	@Autowired
 	private PedidoRequestDisassembler pedidoRequestDisassembler;
+	
+	@Autowired
+	private PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
 
 	@Override
 	@GetMapping
-	public Page<PedidoResumoResponse> pesquisar(PedidoFilter filtro, 
+	public PagedModel<PedidoResumoResponse> pesquisar(PedidoFilter filtro, 
 	        @PageableDefault(size = 10) Pageable pageable) {
-		pageable = traduzirPageable(pageable);
+		Pageable pageableTraduzido = traduzirPageable(pageable);
 		
-	    Page<Pedido> pedidosPage = pedidoRepository.findAll(
-	            PedidoSpecs.usandoFiltro(filtro), pageable);
-	    
-	    List<PedidoResumoResponse> pedidosResumoResponse = pedidoResumoResponseAssembler
-	            .toCollectionResponse(pedidosPage.getContent());
-	    
-	    Page<PedidoResumoResponse> pedidosResumoResponsePage = new PageImpl<>(
-	            pedidosResumoResponse, pageable, pedidosPage.getTotalElements());
-	    
-	    return pedidosResumoResponsePage;
+		Page<Pedido> pedidosPage = pedidoRepository.findAll(
+				PedidoSpecs.usandoFiltro(filtro), pageableTraduzido);
+		
+		pedidosPage = new PageWrapper<>(pedidosPage, pageable);
+		
+		return pagedResourcesAssembler.toModel(pedidosPage, pedidoResumoResponseAssembler);
 	}
 
 	@Override
@@ -79,7 +79,7 @@ public class PedidoController implements PedidoControllerOpenApi {
 	public PedidoResponse buscar(@PathVariable String codigoPedido) {
 		Pedido pedido = emissaoPedido.buscarOuFalhar(codigoPedido);
 		
-		return pedidoResponseAssembler.toResponse(pedido);
+		return pedidoResponseAssembler.toModel(pedido);
 	}
 
 	@Override
@@ -95,7 +95,7 @@ public class PedidoController implements PedidoControllerOpenApi {
 
 			novoPedido = emissaoPedido.emitir(novoPedido);
 
-			return pedidoResponseAssembler.toResponse(novoPedido);
+			return pedidoResponseAssembler.toModel(novoPedido);
 		} catch (EntidadeNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}

@@ -1,7 +1,7 @@
 package com.example.foodapi.api.openapi.controller;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedModel;
 
 import com.example.foodapi.api.exceptionhandler.Problem;
 import com.example.foodapi.api.model.request.PedidoRequest;
@@ -25,7 +25,7 @@ public interface PedidoControllerOpenApi {
                 name = "campos", paramType = "query", type = "string")
     })
     @ApiOperation("Pesquisa os pedidos")
-    Page<PedidoResumoResponse> pesquisar(PedidoFilter filtro, Pageable pageable);
+    PagedModel<PedidoResumoResponse> pesquisar(PedidoFilter filtro, Pageable pageable);
     
     @ApiOperation("Registra um pedido")
     @ApiResponses({
