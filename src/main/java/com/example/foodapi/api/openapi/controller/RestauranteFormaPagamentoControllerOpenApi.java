@@ -1,6 +1,7 @@
 package com.example.foodapi.api.openapi.controller;
 
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
 
 import com.example.foodapi.api.exceptionhandler.Problem;
 import com.example.foodapi.api.model.response.FormaPagamentoResponse;
@@ -28,7 +29,7 @@ public interface RestauranteFormaPagamentoControllerOpenApi {
         @ApiResponse(code = 404, message = "Restaurante ou forma de pagamento não encontrado", 
             response = Problem.class)
     })
-    void desassociar(
+    ResponseEntity<Void> desassociar(
             @ApiParam(value = "ID do restaurante", example = "1", required = true)
             Long restauranteId,
             
