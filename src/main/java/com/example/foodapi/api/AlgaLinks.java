@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import com.example.foodapi.api.controller.CidadeController;
 import com.example.foodapi.api.controller.CozinhaController;
 import com.example.foodapi.api.controller.EstadoController;
+import com.example.foodapi.api.controller.FluxoPedidoController;
 import com.example.foodapi.api.controller.FormaPagamentoController;
 import com.example.foodapi.api.controller.PedidoController;
 import com.example.foodapi.api.controller.RestauranteController;
@@ -41,6 +42,21 @@ public class AlgaLinks {
 		
 		return Link.of(UriTemplate.of(pedidosUrl, 
 				PAGINACAO_VARIABLES.concat(filtroVariables)), "pedidos");
+	}
+	
+	public Link linkToConfirmacaoPedido(String codigoPedido, String rel) {
+		return linkTo(methodOn(FluxoPedidoController.class)
+				.confirmar(codigoPedido)).withRel(rel);
+	}
+	
+	public Link linkToEntregaPedido(String codigoPedido, String rel) {
+		return linkTo(methodOn(FluxoPedidoController.class)
+				.entregar(codigoPedido)).withRel(rel);
+	}
+	
+	public Link linkToCancelamentoPedido(String codigoPedido, String rel) {
+		return linkTo(methodOn(FluxoPedidoController.class)
+				.cancelar(codigoPedido)).withRel(rel);
 	}
 	
 	public Link linkToRestaurante(Long restauranteId, String rel) {
