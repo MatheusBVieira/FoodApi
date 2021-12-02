@@ -1,30 +1,44 @@
 package com.example.foodapi.api.assembler;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
+import com.example.foodapi.api.AlgaLinks;
+import com.example.foodapi.api.controller.FormaPagamentoController;
 import com.example.foodapi.api.model.response.FormaPagamentoResponse;
 import com.example.foodapi.domain.model.FormaPagamento;
 
 @Component
-public class FormaPagamentoResponseAssembler {
+public class FormaPagamentoResponseAssembler extends RepresentationModelAssemblerSupport<FormaPagamento, FormaPagamentoResponse> {
 
-	@Autowired
+    @Autowired
     private ModelMapper modelMapper;
     
-    public FormaPagamentoResponse toResponse(FormaPagamento formaPagamento) {
-        return modelMapper.map(formaPagamento, FormaPagamentoResponse.class);
+    @Autowired
+    private AlgaLinks algaLinks;
+    
+    public FormaPagamentoResponseAssembler() {
+        super(FormaPagamentoController.class, FormaPagamentoResponse.class);
     }
     
-    public List<FormaPagamentoResponse> toCollectionResponse(Collection<FormaPagamento> formasPagamentos) {
-        return formasPagamentos.stream()
-                .map(formaPagamento -> toResponse(formaPagamento))
-                .collect(Collectors.toList());
+    @Override
+    public FormaPagamentoResponse toModel(FormaPagamento formaPagamento) {
+    	FormaPagamentoResponse formaPagamentoModel = 
+                createModelWithId(formaPagamento.getId(), formaPagamento);
+        
+        modelMapper.map(formaPagamento, formaPagamentoModel);
+        
+        formaPagamentoModel.add(algaLinks.linkToFormasPagamento("formasPagamento"));
+        
+        return formaPagamentoModel;
     }
-	
+    
+    @Override
+    public CollectionModel<FormaPagamentoResponse> toCollectionModel(Iterable<? extends FormaPagamento> entities) {
+        return super.toCollectionModel(entities)
+            .add(algaLinks.linkToFormasPagamento());
+    }   
 }

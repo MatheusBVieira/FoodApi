@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -50,7 +51,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
 
 	@Override
 	@GetMapping
-	public ResponseEntity<List<FormaPagamentoResponse>> listar(ServletWebRequest request) {
+	public ResponseEntity<CollectionModel<FormaPagamentoResponse>> listar(ServletWebRequest request) {
 		ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
 		
 		String eTag = "0";
@@ -67,12 +68,12 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
 		
 		List<FormaPagamento> todasFormasPagamentos = formaPagamentoRepository.findAll();
 
-		List<FormaPagamentoResponse> formasPagamentoResponse = formaPagamentoResponseAssembler.toCollectionResponse(todasFormasPagamentos);
+		CollectionModel<FormaPagamentoResponse> formasPagamentosModel = formaPagamentoResponseAssembler.toCollectionModel(todasFormasPagamentos);
 		
 		return ResponseEntity.ok()
 				.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
 				.eTag(eTag)
-				.body(formasPagamentoResponse);
+				.body(formasPagamentosModel);
 	}
 
 	@Override
@@ -96,7 +97,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
 		
 		FormaPagamento formaPagamento = formaPagamentoService.buscarOuFalhar(formaPagamentoId);
 
-		FormaPagamentoResponse formaPagamentoModel =  formaPagamentoResponseAssembler.toResponse(formaPagamento);
+		FormaPagamentoResponse formaPagamentoModel =  formaPagamentoResponseAssembler.toModel(formaPagamento);
 		
 		return ResponseEntity.ok()
 			      .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
@@ -112,7 +113,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
 
 		formaPagamento = formaPagamentoService.salvar(formaPagamento);
 
-		return formaPagamentoResponseAssembler.toResponse(formaPagamento);
+		return formaPagamentoResponseAssembler.toModel(formaPagamento);
 	}
 
 	@Override
@@ -125,7 +126,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
 
 		formaPagamentoAtual = formaPagamentoService.salvar(formaPagamentoAtual);
 
-		return formaPagamentoResponseAssembler.toResponse(formaPagamentoAtual);
+		return formaPagamentoResponseAssembler.toModel(formaPagamentoAtual);
 	}
 
 	@Override
