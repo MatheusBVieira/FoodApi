@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.foodapi.api.AlgaLinks;
 import com.example.foodapi.api.assembler.ProdutoRequestDissasembler;
 import com.example.foodapi.api.assembler.ProdutoResponseAssembler;
 import com.example.foodapi.api.model.request.ProdutoRequest;
@@ -39,7 +41,10 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
     private ProdutoService cadastroProduto;
     
     @Autowired
-    private RestauranteService cadastroRestaurante;
+    private AlgaLinks algaLinks;
+    
+    @Autowired
+    private RestauranteService restauranteService;
     
     @Autowired
     private ProdutoResponseAssembler produtoResponseAssembler;
@@ -48,23 +53,29 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
     private ProdutoRequestDissasembler produtoRequestDisassembler;
     
     @Override
-	@GetMapping
-	public List<ProdutoResponse> listar(@PathVariable Long restauranteId,
-			@RequestParam(required = false) boolean incluirInativos) {
-		Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
-		
-		 List<Produto> todosProdutos = incluirInativos ? produtoRepository.findTodosByRestaurante(restaurante)
-				: produtoRepository.findAtivosByRestaurante(restaurante);
-		
-		return produtoResponseAssembler.toCollectionModel(todosProdutos);
-	}
+    @GetMapping
+    public CollectionModel<ProdutoResponse> listar(@PathVariable Long restauranteId,
+            @RequestParam(required = false, defaultValue = "false") Boolean incluirInativos) {
+        Restaurante restaurante = restauranteService.buscarOuFalhar(restauranteId);
+        
+        List<Produto> todosProdutos = null;
+        
+        if (incluirInativos) {
+            todosProdutos = produtoRepository.findTodosByRestaurante(restaurante);
+        } else {
+            todosProdutos = produtoRepository.findAtivosByRestaurante(restaurante);
+        }
+        
+        return produtoResponseAssembler.toCollectionModel(todosProdutos)
+                .add(algaLinks.linkToProdutos(restauranteId));
+    }
     
     @Override
 	@GetMapping("/{produtoId}")
     public ProdutoResponse buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
         Produto produto = cadastroProduto.buscarOuFalhar(restauranteId, produtoId);
         
-        return produtoResponseAssembler.toResponse(produto);
+        return produtoResponseAssembler.toModel(produto);
     }
     
     @Override
@@ -72,14 +83,14 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
     @ResponseStatus(HttpStatus.CREATED)
     public ProdutoResponse adicionar(@PathVariable Long restauranteId,
             @RequestBody @Valid ProdutoRequest produtoRequest) {
-        Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
+        Restaurante restaurante = restauranteService.buscarOuFalhar(restauranteId);
         
         Produto produto = produtoRequestDisassembler.toDomainObject(produtoRequest);
         produto.setRestaurante(restaurante);
         
         produto = cadastroProduto.salvar(produto);
         
-        return produtoResponseAssembler.toResponse(produto);
+        return produtoResponseAssembler.toModel(produto);
     }
     
     @Override
@@ -92,6 +103,6 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
         
         produtoAtual = cadastroProduto.salvar(produtoAtual);
         
-        return produtoResponseAssembler.toResponse(produtoAtual);
+        return produtoResponseAssembler.toModel(produtoAtual);
     }   
 }

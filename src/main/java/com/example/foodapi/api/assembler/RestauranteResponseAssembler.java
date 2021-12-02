@@ -26,13 +26,13 @@ public class RestauranteResponseAssembler
     }
     
     @Override
-    public RestauranteResponse toModel(Restaurante restaurante) {
+	public RestauranteResponse toModel(Restaurante restaurante) {
     	RestauranteResponse restauranteModel = createModelWithId(restaurante.getId(), restaurante);
-        modelMapper.map(restaurante, restauranteModel);
-        
-        restauranteModel.add(algaLinks.linkToRestaurantes("restaurantes"));
-        
-        if (restaurante.ativacaoPermitida()) {
+		modelMapper.map(restaurante, restauranteModel);
+		
+		restauranteModel.add(algaLinks.linkToRestaurantes("restaurantes"));
+		
+		if (restaurante.ativacaoPermitida()) {
 			restauranteModel.add(
 					algaLinks.linkToRestauranteAtivacao(restaurante.getId(), "ativar"));
 		}
@@ -51,21 +51,26 @@ public class RestauranteResponseAssembler
 			restauranteModel.add(
 					algaLinks.linkToRestauranteFechamento(restaurante.getId(), "fechar"));
 		}
-        
-        restauranteModel.getCozinha().add(
-                algaLinks.linkToCozinha(restaurante.getCozinha().getId()));
-        
-        restauranteModel.getEndereco().getCidade().add(
-                algaLinks.linkToCidade(restaurante.getEndereco().getCidade().getId()));
-        
-        restauranteModel.add(algaLinks.linkToRestauranteFormasPagamento(restaurante.getId(), 
-                "formas-pagamento"));
-        
-        restauranteModel.add(algaLinks.linkToRestauranteResponsaveis(restaurante.getId(), 
-                "responsaveis"));
-        
-        return restauranteModel;
-    }
+		
+		restauranteModel.add(algaLinks.linkToProdutos(restaurante.getId(), "produtos"));
+		
+		restauranteModel.getCozinha().add(
+				algaLinks.linkToCozinha(restaurante.getCozinha().getId()));
+		
+		if (restauranteModel.getEndereco() != null 
+				&& restauranteModel.getEndereco().getCidade() != null) {
+			restauranteModel.getEndereco().getCidade().add(
+					algaLinks.linkToCidade(restaurante.getEndereco().getCidade().getId()));
+		}
+		
+		restauranteModel.add(algaLinks.linkToRestauranteFormasPagamento(restaurante.getId(), 
+				"formas-pagamento"));
+		
+		restauranteModel.add(algaLinks.linkToRestauranteResponsaveis(restaurante.getId(), 
+				"responsaveis"));
+		
+		return restauranteModel;
+	}
     
     @Override
     public CollectionModel<RestauranteResponse> toCollectionModel(Iterable<? extends Restaurante> entities) {

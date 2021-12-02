@@ -1,6 +1,6 @@
 package com.example.foodapi.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import com.example.foodapi.api.exceptionhandler.Problem;
 import com.example.foodapi.api.model.request.ProdutoRequest;
@@ -15,18 +15,18 @@ import io.swagger.annotations.ApiResponses;
 @Api(tags = "Produtos")
 public interface RestauranteProdutoControllerOpenApi {
 
-    @ApiOperation("Lista os produtos de um restaurante")
-    @ApiResponses({
-        @ApiResponse(code = 400, message = "ID do restaurante inválido", response = Problem.class),
-        @ApiResponse(code = 404, message = "Restaurante não encontrado", response = Problem.class)
-    })
-    List<ProdutoResponse> listar(
-            @ApiParam(value = "ID do restaurante", example = "1", required = true)
-            Long restauranteId,
-            
-            @ApiParam(value = "Indica se deve ou não incluir produtos inativos no resultado da listagem", 
-                example = "false", defaultValue = "false")
-            boolean incluirInativos);
+	@ApiOperation("Lista os produtos de um restaurante")
+	@ApiResponses({
+	    @ApiResponse(code = 400, message = "ID do restaurante inválido", response = Problem.class),
+	    @ApiResponse(code = 404, message = "Restaurante não encontrado", response = Problem.class)
+	})
+	CollectionModel<ProdutoResponse> listar(
+	        @ApiParam(value = "ID do restaurante", example = "1", required = true)
+	        Long restauranteId,
+	        
+	        @ApiParam(value = "Indica se deve ou não incluir produtos inativos no resultado da listagem", 
+	            example = "false", defaultValue = "false")
+	        Boolean incluirInativos);
 
     @ApiOperation("Busca um produto de um restaurante")
     @ApiResponses({
