@@ -1,7 +1,5 @@
 package com.example.foodapi.api.assembler;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -41,8 +39,8 @@ public class CidadeResponseAssembler extends RepresentationModelAssemblerSupport
 	
 	@Override
 	public CollectionModel<CidadeResponse> toCollectionModel(Iterable<? extends Cidade> entities) {
-		return super.toCollectionModel(entities)
-				.add(linkTo(CidadeController.class).withSelfRel());
+	    return super.toCollectionModel(entities)
+	            .add(algaLinks.linkToCidades());
 	}
 	
 }

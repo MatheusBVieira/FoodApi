@@ -43,7 +43,7 @@ public class PedidoResponse extends RepresentationModel<PedidoResponse> {
 	@ApiModelProperty(example = "2019-12-01T20:35:00Z")
 	private OffsetDateTime dataCancelamento;
 	
-    private RestauranteResumoResponse restaurante;
+    private RestauranteApenasNomeResponse restaurante;
     private UsuarioResponse cliente;
     private FormaPagamentoResponse formaPagamento;
     private EnderecoResponse enderecoEntrega;
