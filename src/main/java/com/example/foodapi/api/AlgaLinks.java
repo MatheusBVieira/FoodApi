@@ -16,6 +16,8 @@ import com.example.foodapi.api.controller.CozinhaController;
 import com.example.foodapi.api.controller.EstadoController;
 import com.example.foodapi.api.controller.FluxoPedidoController;
 import com.example.foodapi.api.controller.FormaPagamentoController;
+import com.example.foodapi.api.controller.GrupoController;
+import com.example.foodapi.api.controller.GrupoPermissaoController;
 import com.example.foodapi.api.controller.PedidoController;
 import com.example.foodapi.api.controller.RestauranteController;
 import com.example.foodapi.api.controller.RestauranteFormaPagamentoController;
@@ -265,6 +267,19 @@ public class AlgaLinks {
 	
 	public Link linkToCozinha(Long cozinhaId) {
 		return linkToCozinha(cozinhaId, IanaLinkRelations.SELF.value());
+	}
+	
+	public Link linkToGrupos(String rel) {
+	    return linkTo(GrupoController.class).withRel(rel);
+	}
+
+	public Link linkToGrupos() {
+	    return linkToGrupos(IanaLinkRelations.SELF.value());
+	}
+
+	public Link linkToGrupoPermissoes(Long grupoId, String rel) {
+	    return linkTo(methodOn(GrupoPermissaoController.class)
+	            .listar(grupoId)).withRel(rel);
 	}
 	
 }

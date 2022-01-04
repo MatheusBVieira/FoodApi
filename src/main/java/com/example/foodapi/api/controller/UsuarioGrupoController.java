@@ -1,8 +1,7 @@
 package com.example.foodapi.api.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,11 +29,12 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
     private GrupoResponseAssembler grupoResponseAssembler;
     
     @Override
-	@GetMapping
-    public List<GrupoResponse> listar(@PathVariable Long usuarioId) {
+    @GetMapping
+    public CollectionModel<GrupoResponse> listar(@PathVariable Long usuarioId) {
         Usuario usuario = cadastroUsuario.buscarOuFalhar(usuarioId);
         
-        return grupoResponseAssembler.toCollectionModel(usuario.getGrupos());
+        return grupoResponseAssembler.toCollectionModel(usuario.getGrupos())
+                .removeLinks();
     }
     
     @Override

@@ -1,6 +1,6 @@
 package com.example.foodapi.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import com.example.foodapi.api.exceptionhandler.Problem;
 import com.example.foodapi.api.model.request.GrupoRequest;
@@ -15,8 +15,8 @@ import io.swagger.annotations.ApiResponses;
 @Api(tags = "Grupos")
 public interface GrupoControllerOpenApi {
 
-    @ApiOperation("Lista os grupos")
-    List<GrupoResponse> listar();
+	@ApiOperation("Lista os grupos")
+	CollectionModel<GrupoResponse> listar();
     
     @ApiOperation("Busca um grupo por ID")
     @ApiResponses({

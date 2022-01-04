@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,17 +38,17 @@ public class GrupoController implements GrupoControllerOpenApi {
     private GrupoService grupoService;
     
     @Autowired
-    private GrupoResponseAssembler GrupoResponseAssembler;
+    private GrupoResponseAssembler grupoResponseAssembler;
     
     @Autowired
     private GrupoRequestDissasember grupoRequestDisassembler;
     
     @Override
-	@GetMapping
-    public List<GrupoResponse> listar() {
+    @GetMapping
+    public CollectionModel<GrupoResponse> listar() {
         List<Grupo> todosGrupos = grupoRepository.findAll();
         
-        return GrupoResponseAssembler.toCollectionModel(todosGrupos);
+        return grupoResponseAssembler.toCollectionModel(todosGrupos);
     }
     
     @Override
@@ -55,7 +56,7 @@ public class GrupoController implements GrupoControllerOpenApi {
     public GrupoResponse buscar(@PathVariable Long grupoId) {
         Grupo grupo = grupoService.buscarOuFalhar(grupoId);
         
-        return GrupoResponseAssembler.toResponse(grupo);
+        return grupoResponseAssembler.toModel(grupo);
     }
     
     @Override
@@ -66,7 +67,7 @@ public class GrupoController implements GrupoControllerOpenApi {
         
         grupo = grupoService.salvar(grupo);
         
-        return GrupoResponseAssembler.toResponse(grupo);
+        return grupoResponseAssembler.toModel(grupo);
     }
     
     @Override
@@ -79,7 +80,7 @@ public class GrupoController implements GrupoControllerOpenApi {
         
         grupoAtual = grupoService.salvar(grupoAtual);
         
-        return GrupoResponseAssembler.toResponse(grupoAtual);
+        return grupoResponseAssembler.toModel(grupoAtual);
     }
     
     @Override
