@@ -70,7 +70,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 		
 		FotoProduto fotoSalva = catalogoFotoProduto.salvar(foto, arquivo.getInputStream());
 		
-		return fotoProdutoResponseAssembler.toResponse(fotoSalva);
+		return fotoProdutoResponseAssembler.toModel(fotoSalva);
 	}
 	
 	@Override
@@ -79,7 +79,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 			@PathVariable Long produtoId) {
 		FotoProduto fotoProduto = catalogoFotoProduto.buscarOuFalhar(restauranteId, produtoId);
 		
-		return fotoProdutoResponseAssembler.toResponse(fotoProduto);
+		return fotoProdutoResponseAssembler.toModel(fotoProduto);
 	}
 	
 	@Override
