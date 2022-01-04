@@ -1,6 +1,7 @@
 package com.example.foodapi.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
 
 import com.example.foodapi.api.exceptionhandler.Problem;
 import com.example.foodapi.api.model.response.PermissaoResponse;
@@ -14,14 +15,14 @@ import io.swagger.annotations.ApiResponses;
 @Api(tags = "Grupos")
 public interface GrupoPermissaoControllerOpenApi {
     
-    @ApiOperation("Lista as permissões associadas a um grupo")
-    @ApiResponses({
-        @ApiResponse(code = 400, message = "ID do grupo inválido", response = Problem.class),
-        @ApiResponse(code = 404, message = "Grupo não encontrado", response = Problem.class)
-    })
-    List<PermissaoResponse> listar(
-            @ApiParam(value = "ID do grupo", example = "1", required = true)
-            Long grupoId);
+	@ApiOperation("Lista as permissões associadas a um grupo")
+	@ApiResponses({
+	    @ApiResponse(code = 400, message = "ID do grupo inválido", response = Problem.class),
+	    @ApiResponse(code = 404, message = "Grupo não encontrado", response = Problem.class)
+	})
+	CollectionModel<PermissaoResponse> listar(
+	        @ApiParam(value = "ID do grupo", example = "1", required = true)
+	        Long grupoId);
 
     @ApiOperation("Desassociação de permissão com grupo")
     @ApiResponses({
@@ -29,7 +30,7 @@ public interface GrupoPermissaoControllerOpenApi {
         @ApiResponse(code = 404, message = "Grupo ou permissão não encontrada", 
             response = Problem.class)
     })
-    void desassociar(
+    ResponseEntity<Void> desassociar(
             @ApiParam(value = "ID do grupo", example = "1", required = true)
             Long grupoId,
             
@@ -42,7 +43,7 @@ public interface GrupoPermissaoControllerOpenApi {
         @ApiResponse(code = 404, message = "Grupo ou permissão não encontrada", 
             response = Problem.class)
     })
-    void associar(
+    ResponseEntity<Void> associar(
             @ApiParam(value = "ID do grupo", example = "1", required = true)
             Long grupoId,
             

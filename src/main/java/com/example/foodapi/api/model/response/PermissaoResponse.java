@@ -1,13 +1,17 @@
 package com.example.foodapi.api.model.response;
 
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+@Relation(collectionRelation = "permissoes")
 @Setter
 @Getter
-public class PermissaoResponse {
-
+public class PermissaoResponse extends RepresentationModel<PermissaoResponse> {
+	
 	@ApiModelProperty(example = "1")
 	private Long id;
 
