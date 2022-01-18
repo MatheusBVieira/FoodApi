@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.Links;
 import org.springframework.hateoas.client.LinkDiscoverer;
 import org.springframework.hateoas.client.LinkDiscoverers;
 import org.springframework.hateoas.mediatype.collectionjson.CollectionJsonLinkDiscoverer;
@@ -31,6 +32,7 @@ import com.example.foodapi.api.model.response.CozinhaResponse;
 import com.example.foodapi.api.model.response.PedidoResumoResponse;
 import com.example.foodapi.api.openapi.controller.PedidosResumoModelOpenApi;
 import com.example.foodapi.api.openapi.model.CozinhasModelOpenApi;
+import com.example.foodapi.api.openapi.model.LinksModelOpenApi;
 import com.example.foodapi.api.openapi.model.PageableModelOpenApi;
 import com.fasterxml.classmate.TypeResolver;
 
@@ -85,6 +87,7 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 						URL.class, URI.class, URLStreamHandler.class, Resource.class,
 						File.class, InputStream.class)
 				.directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
+				.directModelSubstitute(Links.class, LinksModelOpenApi.class)
 				.alternateTypeRules(AlternateTypeRules.newRule(
 						typeResolver.resolve(Page.class, CozinhaResponse.class),
 						CozinhasModelOpenApi.class))
