@@ -14,10 +14,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.Resource;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Links;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.client.LinkDiscoverer;
 import org.springframework.hateoas.client.LinkDiscoverers;
 import org.springframework.hateoas.mediatype.collectionjson.CollectionJsonLinkDiscoverer;
@@ -100,11 +100,11 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 				.directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
 				.directModelSubstitute(Links.class, LinksModelOpenApi.class)
 				.alternateTypeRules(AlternateTypeRules.newRule(
-						typeResolver.resolve(Page.class, CozinhaResponse.class),
+						typeResolver.resolve(PagedModel.class, CozinhaResponse.class),
 						CozinhasModelOpenApi.class))
 				.alternateTypeRules(AlternateTypeRules.newRule(
-	                    typeResolver.resolve(Page.class, PedidoResumoResponse.class),
-	                    PedidosResumoModelOpenApi.class))
+					    typeResolver.resolve(PagedModel.class, PedidoResumoResponse.class),
+					    PedidosResumoModelOpenApi.class))
 				.alternateTypeRules(AlternateTypeRules.newRule(
 						typeResolver.resolve(CollectionModel.class, CidadeResponse.class),
 						CidadesModelOpenApi.class))
