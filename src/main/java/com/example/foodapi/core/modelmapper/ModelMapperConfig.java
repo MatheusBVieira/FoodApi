@@ -4,8 +4,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.example.foodapi.api.model.request.ItemPedidoRequest;
-import com.example.foodapi.api.model.response.EnderecoResponse;
+import com.example.foodapi.api.v1.model.request.ItemPedidoRequest;
+import com.example.foodapi.api.v1.model.response.EnderecoResponse;
 import com.example.foodapi.domain.model.Endereco;
 import com.example.foodapi.domain.model.ItemPedido;
 
