@@ -31,10 +31,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.example.foodapi.api.exceptionhandler.Problem;
 import com.example.foodapi.api.model.response.CidadeResponse;
 import com.example.foodapi.api.model.response.CozinhaResponse;
+import com.example.foodapi.api.model.response.EstadoResponse;
 import com.example.foodapi.api.model.response.PedidoResumoResponse;
 import com.example.foodapi.api.openapi.controller.PedidosResumoModelOpenApi;
 import com.example.foodapi.api.openapi.model.CidadesModelOpenApi;
 import com.example.foodapi.api.openapi.model.CozinhasModelOpenApi;
+import com.example.foodapi.api.openapi.model.EstadosModelOpenApi;
 import com.example.foodapi.api.openapi.model.LinksModelOpenApi;
 import com.example.foodapi.api.openapi.model.PageableModelOpenApi;
 import com.fasterxml.classmate.TypeResolver;
@@ -100,6 +102,9 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 				.alternateTypeRules(AlternateTypeRules.newRule(
 						typeResolver.resolve(CollectionModel.class, CidadeResponse.class),
 						CidadesModelOpenApi.class))
+				.alternateTypeRules(AlternateTypeRules.newRule(
+				        typeResolver.resolve(CollectionModel.class, EstadoResponse.class),
+				        EstadosModelOpenApi.class))
 				.apiInfo(apiInfo())
 				.tags(new Tag("Cidades", "Gerencia as cidades"),
 				        new Tag("Grupos", "Gerencia os grupos de usuários"),
