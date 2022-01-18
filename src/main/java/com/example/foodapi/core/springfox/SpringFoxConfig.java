@@ -37,6 +37,8 @@ import com.example.foodapi.api.model.response.GrupoResponse;
 import com.example.foodapi.api.model.response.PedidoResumoResponse;
 import com.example.foodapi.api.model.response.PermissaoResponse;
 import com.example.foodapi.api.model.response.ProdutoResponse;
+import com.example.foodapi.api.model.response.RestauranteBasicoResponse;
+import com.example.foodapi.api.model.response.UsuarioResponse;
 import com.example.foodapi.api.openapi.controller.PedidosResumoModelOpenApi;
 import com.example.foodapi.api.openapi.model.CidadesModelOpenApi;
 import com.example.foodapi.api.openapi.model.CozinhasModelOpenApi;
@@ -47,6 +49,8 @@ import com.example.foodapi.api.openapi.model.LinksModelOpenApi;
 import com.example.foodapi.api.openapi.model.PageableModelOpenApi;
 import com.example.foodapi.api.openapi.model.PermissoesModelOpenApi;
 import com.example.foodapi.api.openapi.model.ProdutosModelOpenApi;
+import com.example.foodapi.api.openapi.model.RestaurantesBasicoModelOpenApi;
+import com.example.foodapi.api.openapi.model.UsuariosModelOpenApi;
 import com.fasterxml.classmate.TypeResolver;
 
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
@@ -125,6 +129,12 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 				.alternateTypeRules(AlternateTypeRules.newRule(
 					    typeResolver.resolve(CollectionModel.class, ProdutoResponse.class),
 					    ProdutosModelOpenApi.class))
+				.alternateTypeRules(AlternateTypeRules.newRule(
+					    typeResolver.resolve(CollectionModel.class, RestauranteBasicoResponse.class),
+					    RestaurantesBasicoModelOpenApi.class))
+				.alternateTypeRules(AlternateTypeRules.newRule(
+				        typeResolver.resolve(CollectionModel.class, UsuarioResponse.class),
+				        UsuariosModelOpenApi.class))
 				.apiInfo(apiInfo())
 				.tags(new Tag("Cidades", "Gerencia as cidades"),
 				        new Tag("Grupos", "Gerencia os grupos de usuários"),
