@@ -7,6 +7,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 import com.example.foodapi.api.exceptionhandler.Problem;
 import com.example.foodapi.api.model.request.FormaPagamentoRequest;
 import com.example.foodapi.api.model.response.FormaPagamentoResponse;
+import com.example.foodapi.api.openapi.model.FormasPagamentoModelOpenApi;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,7 +18,7 @@ import io.swagger.annotations.ApiResponses;
 @Api(tags = "Formas de pagamento")
 public interface FormaPagamentoControllerOpenApi {
 
-	@ApiOperation("Lista as formas de pagamento")
+	@ApiOperation(value = "Lista as formas de pagamento", response = FormasPagamentoModelOpenApi.class)
 	ResponseEntity<CollectionModel<FormaPagamentoResponse>> listar(ServletWebRequest request);   
     
     @ApiOperation("Busca uma forma de pagamento por ID")
