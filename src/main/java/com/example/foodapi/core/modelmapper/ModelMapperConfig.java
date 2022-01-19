@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 
 import com.example.foodapi.api.v1.model.request.ItemPedidoRequest;
 import com.example.foodapi.api.v1.model.response.EnderecoResponse;
+import com.example.foodapi.api.v2.model.request.CidadeRequestV2;
+import com.example.foodapi.domain.model.Cidade;
 import com.example.foodapi.domain.model.Endereco;
 import com.example.foodapi.domain.model.ItemPedido;
 
@@ -15,6 +17,9 @@ public class ModelMapperConfig {
 	@Bean
 	public ModelMapper modelMapper() {
 		var modelMapper = new ModelMapper();
+		
+		modelMapper.createTypeMap(CidadeRequestV2.class, Cidade.class)
+		.addMappings(mapper -> mapper.skip(Cidade::setId));
 		
 //		modelMapper.createTypeMap(Restaurante.class, RestauranteModel.class)
 //			.addMapping(Restaurante::getTaxaFrete, RestauranteModel::setPrecoFrete);
