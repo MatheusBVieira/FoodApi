@@ -28,7 +28,7 @@ import com.example.foodapi.domain.repository.EstadoRepository;
 import com.example.foodapi.domain.service.EstadoService;
 
 @RestController
-@RequestMapping(path = "/estados", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/estados", produces = MediaType.APPLICATION_JSON_VALUE)
 public class EstadoController implements EstadoControllerOpenApi {
 
 	@Autowired

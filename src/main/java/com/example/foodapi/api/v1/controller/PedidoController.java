@@ -39,7 +39,7 @@ import com.example.foodapi.domain.service.EmissaoPedidoService;
 import com.example.foodapi.infrastructure.repository.spec.PedidoSpecs;
 
 @RestController
-@RequestMapping(path = "/pedidos", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/pedidos", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PedidoController implements PedidoControllerOpenApi {
 
 	@Autowired

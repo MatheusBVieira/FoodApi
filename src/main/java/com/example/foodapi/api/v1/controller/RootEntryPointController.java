@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.foodapi.api.v1.AlgaLinks;
 
 @RestController
-@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RootEntryPointController {
 
 	@Autowired

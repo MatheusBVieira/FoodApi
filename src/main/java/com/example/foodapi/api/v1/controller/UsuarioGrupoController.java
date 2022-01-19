@@ -21,7 +21,7 @@ import com.example.foodapi.domain.model.Usuario;
 import com.example.foodapi.domain.service.UsuarioService;
 
 @RestController
-@RequestMapping(path = "/usuarios/{usuarioId}/grupos", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/usuarios/{usuarioId}/grupos", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
 
 	@Autowired

@@ -20,7 +20,7 @@ import com.example.foodapi.domain.service.VendaQueryService;
 import com.example.foodapi.domain.service.VendaReportService;
 
 @RestController
-@RequestMapping(path = "/estatisticas")
+@RequestMapping(path = "/v1/estatisticas")
 public class EstatisticasController implements EstatisticasControllerOpenApi {
 
 	@Autowired

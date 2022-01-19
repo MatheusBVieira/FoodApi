@@ -30,7 +30,7 @@ import com.example.foodapi.domain.repository.CozinhaRepository;
 import com.example.foodapi.domain.service.CozinhaService;
 
 @RestController
-@RequestMapping(value = "/cozinhas", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/v1/cozinhas", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CozinhaController implements CozinhaControllerOpenApi {
 
 	@Autowired

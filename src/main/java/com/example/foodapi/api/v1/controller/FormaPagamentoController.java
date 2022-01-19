@@ -34,7 +34,7 @@ import com.example.foodapi.domain.repository.FormaPagamentoRepository;
 import com.example.foodapi.domain.service.FormaPagamentoService;
 
 @RestController
-@RequestMapping(path = "/formas-pagamento", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/formas-pagamento", produces = MediaType.APPLICATION_JSON_VALUE)
 public class FormaPagamentoController implements FormaPagamentoControllerOpenApi {
 
 	@Autowired
