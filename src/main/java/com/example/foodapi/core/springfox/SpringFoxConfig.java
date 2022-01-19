@@ -84,7 +84,7 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 	    return new LinkDiscoverers(SimplePluginRegistry.create(plugins));
 	}
 	
-	@Bean
+//	@Bean
 	public Docket apiDocketV1() {
 		var typeResolver = new TypeResolver();
 		
