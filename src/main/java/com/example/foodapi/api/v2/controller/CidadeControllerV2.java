@@ -23,6 +23,7 @@ import com.example.foodapi.api.v2.assembler.CidadeInputDisassemblerV2;
 import com.example.foodapi.api.v2.assembler.CidadeModelAssemblerV2;
 import com.example.foodapi.api.v2.model.request.CidadeRequestV2;
 import com.example.foodapi.api.v2.model.response.CidadeResponseV2;
+import com.example.foodapi.api.v2.openapi.CidadeControllerV2OpenApi;
 import com.example.foodapi.domain.exception.EstadoNaoEncontradoException;
 import com.example.foodapi.domain.exception.NegocioException;
 import com.example.foodapi.domain.model.Cidade;
@@ -31,7 +32,7 @@ import com.example.foodapi.domain.service.CidadeService;
 
 @RestController
 @RequestMapping(path = "/v2/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
-public class CidadeControllerV2 {
+public class CidadeControllerV2 implements CidadeControllerV2OpenApi{
 
 	@Autowired
 	private CidadeRepository cidadeRepository;

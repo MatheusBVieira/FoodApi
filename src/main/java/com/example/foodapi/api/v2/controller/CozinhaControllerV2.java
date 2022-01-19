@@ -24,13 +24,14 @@ import com.example.foodapi.api.v2.assembler.CozinhaInputDisassemblerV2;
 import com.example.foodapi.api.v2.assembler.CozinhaModelAssemblerV2;
 import com.example.foodapi.api.v2.model.request.CozinhaRequestV2;
 import com.example.foodapi.api.v2.model.response.CozinhaResponseV2;
+import com.example.foodapi.api.v2.openapi.CozinhaControllerV2OpenApi;
 import com.example.foodapi.domain.model.Cozinha;
 import com.example.foodapi.domain.repository.CozinhaRepository;
 import com.example.foodapi.domain.service.CozinhaService;
 
 @RestController
 @RequestMapping(value = "/v2/cozinhas", produces = MediaType.APPLICATION_JSON_VALUE)
-public class CozinhaControllerV2 {
+public class CozinhaControllerV2 implements CozinhaControllerV2OpenApi{
 
     @Autowired
     private CozinhaRepository cozinhaRepository;
@@ -47,7 +48,8 @@ public class CozinhaControllerV2 {
     @Autowired
     private PagedResourcesAssembler<Cozinha> pagedResourcesAssembler;
     
-    @GetMapping
+    @Override
+	@GetMapping
     public PagedModel<CozinhaResponseV2> listar(@PageableDefault(size = 10) Pageable pageable) {
         Page<Cozinha> cozinhasPage = cozinhaRepository.findAll(pageable);
         
@@ -57,14 +59,16 @@ public class CozinhaControllerV2 {
         return cozinhasPagedModel;
     }
     
-    @GetMapping("/{cozinhaId}")
+    @Override
+	@GetMapping("/{cozinhaId}")
     public CozinhaResponseV2 buscar(@PathVariable Long cozinhaId) {
         Cozinha cozinha = cozinhaService.buscarOuFalhar(cozinhaId);
         
         return cozinhaModelAssembler.toModel(cozinha);
     }
 
-    @PostMapping
+    @Override
+	@PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CozinhaResponseV2 adicionar(@RequestBody @Valid CozinhaRequestV2 cozinhaInput) {
         Cozinha cozinha = cozinhaInputDisassembler.toDomainObject(cozinhaInput);
@@ -73,7 +77,8 @@ public class CozinhaControllerV2 {
         return cozinhaModelAssembler.toModel(cozinha);
     }
     
-    @PutMapping("/{cozinhaId}")
+    @Override
+	@PutMapping("/{cozinhaId}")
     public CozinhaResponseV2 atualizar(@PathVariable Long cozinhaId,
             @RequestBody @Valid CozinhaRequestV2 cozinhaInput) {
         Cozinha cozinhaAtual = cozinhaService.buscarOuFalhar(cozinhaId);
@@ -83,7 +88,8 @@ public class CozinhaControllerV2 {
         return cozinhaModelAssembler.toModel(cozinhaAtual);
     }
     
-    @DeleteMapping("/{cozinhaId}")
+    @Override
+	@DeleteMapping("/{cozinhaId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long cozinhaId) {
         cozinhaService.excluir(cozinhaId);
