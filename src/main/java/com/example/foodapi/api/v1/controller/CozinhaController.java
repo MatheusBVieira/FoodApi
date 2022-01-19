@@ -29,6 +29,9 @@ import com.example.foodapi.domain.model.Cozinha;
 import com.example.foodapi.domain.repository.CozinhaRepository;
 import com.example.foodapi.domain.service.CozinhaService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping(value = "/v1/cozinhas", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CozinhaController implements CozinhaControllerOpenApi {
@@ -51,6 +54,8 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 	@Override
 	@GetMapping
 	public PagedModel<CozinhaResponse> listar(@PageableDefault(size = 10) Pageable pageable) {
+		log.info("Consultando cozinhas com páginas de {} registros...", pageable.getPageSize());
+		
 		Page<Cozinha> cozinhasPage = cozinhaRepository.findAll(pageable);
 		
 		PagedModel<CozinhaResponse> cozinhasPagedModel = pagedResourcesAssembler
