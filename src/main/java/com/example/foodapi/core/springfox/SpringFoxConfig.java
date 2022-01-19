@@ -84,7 +84,7 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 	    return new LinkDiscoverers(SimplePluginRegistry.create(plugins));
 	}
 	
-//	@Bean
+	@Bean
 	public Docket apiDocketV1() {
 		var typeResolver = new TypeResolver();
 		
@@ -243,10 +243,8 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 	
 	public ApiInfo apiInfoV1() {
 		return new ApiInfoBuilder()
-				.title("FoodApi (Depreciada)")
-				.description("Api aberta para clientes e restaurantes.<br>"
-						+ "<strong>Essa versão da api está depreciada e deixará de existir a partir 01/01/2030. "
-						+ "Use a versão mais atual da API.")
+				.title("FoodApi")
+				.description("API aberta para clientes e restaurantes")
 				.version("1")
 				.build();
 	}
