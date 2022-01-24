@@ -1,6 +1,8 @@
 package com.example.foodapi.api.v1.model.request;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -28,5 +30,9 @@ public class EnderecoRequest {
 	@ApiModelProperty(example = "Centro", required = true)
 	@NotBlank
 	private String bairro;
+	
+	@Valid
+	@NotNull
+	private CidadeIdRequest cidade;
 	
 }

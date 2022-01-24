@@ -29,6 +29,7 @@ import com.example.foodapi.api.v1.model.response.PedidoResumoResponse;
 import com.example.foodapi.api.v1.openapi.controller.PedidoControllerOpenApi;
 import com.example.foodapi.core.data.PageWrapper;
 import com.example.foodapi.core.data.PageableTranslator;
+import com.example.foodapi.core.security.AlgaSecurity;
 import com.example.foodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.example.foodapi.domain.exception.NegocioException;
 import com.example.foodapi.domain.filter.PedidoFilter;
@@ -59,6 +60,9 @@ public class PedidoController implements PedidoControllerOpenApi {
 	
 	@Autowired
 	private PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
+	
+	@Autowired
+	private AlgaSecurity algaSecurity;
 
 	@Override
 	@GetMapping
@@ -89,9 +93,8 @@ public class PedidoController implements PedidoControllerOpenApi {
 		try {
 			Pedido novoPedido = pedidoRequestDisassembler.toDomainObject(pedidoRequest);
 
-			// TODO pegar usuário autenticado
 			novoPedido.setCliente(new Usuario());
-			novoPedido.getCliente().setId(1L);
+			novoPedido.getCliente().setId(algaSecurity.getUsuarioId());
 
 			novoPedido = emissaoPedido.emitir(novoPedido);
 
