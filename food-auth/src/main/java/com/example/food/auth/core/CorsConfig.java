@@ -1,4 +1,4 @@
-package com.example.food.auth;
+package com.example.food.auth.core;
 import java.util.Collections;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;

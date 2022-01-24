@@ -1,4 +1,4 @@
-package com.example.food.auth;
+package com.example.food.auth.core;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
