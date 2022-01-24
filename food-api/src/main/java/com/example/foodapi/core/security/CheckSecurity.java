@@ -1,4 +1,5 @@
 package com.example.foodapi.core.security;
+
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -10,17 +11,19 @@ import org.springframework.security.access.prepost.PreAuthorize;
 public @interface CheckSecurity {
 
 	public @interface Cozinhas {
-		
-		@PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
-		@Retention(RUNTIME)
-		@Target(METHOD)
-		public @interface PodeEditar { }
 
-		@PreAuthorize("isAuthenticated()")
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_COZINHAS')")
 		@Retention(RUNTIME)
 		@Target(METHOD)
-		public @interface PodeConsultar { }
-		
+		public @interface PodeEditar {
+		}
+
+		@PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		public @interface PodeConsultar {
+		}
+
 	}
-	
+
 }
