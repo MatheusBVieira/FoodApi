@@ -10,7 +10,6 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +25,7 @@ import com.example.foodapi.api.v1.assembler.CozinhaResponseAssembler;
 import com.example.foodapi.api.v1.model.request.CozinhaRequest;
 import com.example.foodapi.api.v1.model.response.CozinhaResponse;
 import com.example.foodapi.api.v1.openapi.controller.CozinhaControllerOpenApi;
+import com.example.foodapi.core.security.CheckSecurity;
 import com.example.foodapi.domain.model.Cozinha;
 import com.example.foodapi.domain.repository.CozinhaRepository;
 import com.example.foodapi.domain.service.CozinhaService;
@@ -52,7 +52,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 	@Autowired
 	private PagedResourcesAssembler<Cozinha> pagedResourcesAssembler;
 	
-	@PreAuthorize("isAuthenticated()")
+	@CheckSecurity.Cozinhas.PodeConsultar
 	@Override
 	@GetMapping
 	public PagedModel<CozinhaResponse> listar(@PageableDefault(size = 10) Pageable pageable) {
@@ -66,7 +66,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 		return cozinhasPagedModel;
 	}
 	
-	@PreAuthorize("isAuthenticated()")
+	@CheckSecurity.Cozinhas.PodeConsultar
 	@Override
 	@GetMapping("/{cozinhaId}")
 	public CozinhaResponse buscar(@PathVariable Long cozinhaId) {
@@ -75,7 +75,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 		return cozinhaModelAssembler.toModel(cozinha);
 	}
 	
-	@PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
+	@CheckSecurity.Cozinhas.PodeEditar
 	@Override
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
@@ -86,7 +86,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 		return cozinhaModelAssembler.toModel(cozinha);
 	}
 	
-	@PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
+	@CheckSecurity.Cozinhas.PodeEditar
 	@Override
 	@PutMapping("/{cozinhaId}")
 	public CozinhaResponse atualizar(@PathVariable Long cozinhaId,
@@ -98,7 +98,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 		return cozinhaModelAssembler.toModel(cozinhaAtual);
 	}
 	
-	@PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
+	@CheckSecurity.Cozinhas.PodeEditar
 	@Override
 	@DeleteMapping("/{cozinhaId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
