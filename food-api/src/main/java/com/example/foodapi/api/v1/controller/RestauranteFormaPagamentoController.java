@@ -17,6 +17,7 @@ import com.example.foodapi.api.v1.AlgaLinks;
 import com.example.foodapi.api.v1.assembler.FormaPagamentoResponseAssembler;
 import com.example.foodapi.api.v1.model.response.FormaPagamentoResponse;
 import com.example.foodapi.api.v1.openapi.controller.RestauranteFormaPagamentoControllerOpenApi;
+import com.example.foodapi.core.security.CheckSecurity;
 import com.example.foodapi.domain.model.Restaurante;
 import com.example.foodapi.domain.service.RestauranteService;
 
@@ -33,6 +34,7 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
 	@Autowired
 	private FormaPagamentoResponseAssembler formaPagamentoModelAssembler;
 	
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@Override
 	@GetMapping
 	public CollectionModel<FormaPagamentoResponse> listar(@PathVariable Long restauranteId) {
@@ -52,6 +54,7 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
 		return formasPagamentoModel;
 	}
 	
+	@CheckSecurity.Restaurantes.PodeEditar
 	@Override
 	@DeleteMapping("/{formaPagamentoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
@@ -61,6 +64,7 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
 		return ResponseEntity.noContent().build();
 	}
 	
+	@CheckSecurity.Restaurantes.PodeEditar
 	@Override
 	@PutMapping("/{formaPagamentoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)

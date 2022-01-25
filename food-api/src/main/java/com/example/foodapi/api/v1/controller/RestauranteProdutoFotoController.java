@@ -27,6 +27,7 @@ import com.example.foodapi.api.v1.assembler.FotoProdutoResponseAssembler;
 import com.example.foodapi.api.v1.model.request.FotoProdutoRequest;
 import com.example.foodapi.api.v1.model.response.FotoProdutoResponse;
 import com.example.foodapi.api.v1.openapi.controller.RestauranteProdutoFotoControllerOpenApi;
+import com.example.foodapi.core.security.CheckSecurity;
 import com.example.foodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.example.foodapi.domain.model.FotoProduto;
 import com.example.foodapi.domain.model.Produto;
@@ -52,6 +53,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 	@Autowired
 	private FotoProdutoResponseAssembler fotoProdutoResponseAssembler;
 	
+	@CheckSecurity.Restaurantes.PodeEditar
 	@Override
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public FotoProdutoResponse atualizarFoto(@PathVariable Long restauranteId,
@@ -73,6 +75,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 		return fotoProdutoResponseAssembler.toModel(fotoSalva);
 	}
 	
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@Override
 	@GetMapping()
 	public FotoProdutoResponse buscar(@PathVariable Long restauranteId, 
@@ -112,6 +115,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 		}
 	}
 	
+	@CheckSecurity.Restaurantes.PodeEditar
 	@Override
 	@DeleteMapping
 	@ResponseStatus(HttpStatus.NO_CONTENT)

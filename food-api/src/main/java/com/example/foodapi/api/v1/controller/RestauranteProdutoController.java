@@ -24,6 +24,7 @@ import com.example.foodapi.api.v1.assembler.ProdutoResponseAssembler;
 import com.example.foodapi.api.v1.model.request.ProdutoRequest;
 import com.example.foodapi.api.v1.model.response.ProdutoResponse;
 import com.example.foodapi.api.v1.openapi.controller.RestauranteProdutoControllerOpenApi;
+import com.example.foodapi.core.security.CheckSecurity;
 import com.example.foodapi.domain.model.Produto;
 import com.example.foodapi.domain.model.Restaurante;
 import com.example.foodapi.domain.repository.ProdutoRepository;
@@ -52,6 +53,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
     @Autowired
     private ProdutoRequestDissasembler produtoRequestDisassembler;
     
+    @CheckSecurity.Restaurantes.PodeConsultar
     @Override
     @GetMapping
     public CollectionModel<ProdutoResponse> listar(@PathVariable Long restauranteId,
@@ -70,6 +72,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
                 .add(algaLinks.linkToProdutos(restauranteId));
     }
     
+    @CheckSecurity.Restaurantes.PodeConsultar
     @Override
 	@GetMapping("/{produtoId}")
     public ProdutoResponse buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
@@ -78,6 +81,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
         return produtoResponseAssembler.toModel(produto);
     }
     
+    @CheckSecurity.Restaurantes.PodeEditar
     @Override
 	@PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -93,6 +97,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
         return produtoResponseAssembler.toModel(produto);
     }
     
+    @CheckSecurity.Restaurantes.PodeEditar
     @Override
 	@PutMapping("/{produtoId}")
     public ProdutoResponse atualizar(@PathVariable Long restauranteId, @PathVariable Long produtoId,

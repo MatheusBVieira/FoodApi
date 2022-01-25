@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.foodapi.api.v1.AlgaLinks;
 import com.example.foodapi.api.v1.assembler.UsuarioResponseAssembler;
 import com.example.foodapi.api.v1.model.response.UsuarioResponse;
+import com.example.foodapi.core.security.CheckSecurity;
 import com.example.foodapi.domain.model.Restaurante;
 import com.example.foodapi.domain.service.RestauranteService;
 
@@ -32,6 +33,7 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
     @Autowired
 	private AlgaLinks algaLinks;
     
+    @CheckSecurity.Restaurantes.PodeEditar
     @Override
 	@GetMapping
 	public CollectionModel<UsuarioResponse> listar(@PathVariable Long restauranteId) {
@@ -51,6 +53,7 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
 		return usuariosModel;
 	}
 
+    @CheckSecurity.Restaurantes.PodeEditar
 	@Override
 	@DeleteMapping("/{usuarioId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
@@ -60,6 +63,7 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
 		return ResponseEntity.noContent().build();
 	}
 	
+    @CheckSecurity.Restaurantes.PodeEditar
 	@Override
 	@PutMapping("/{usuarioId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
