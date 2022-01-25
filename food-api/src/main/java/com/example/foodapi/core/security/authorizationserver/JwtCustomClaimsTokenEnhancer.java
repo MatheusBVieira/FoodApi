@@ -1,4 +1,4 @@
-package com.example.food.auth.core;
+package com.example.foodapi.core.security.authorizationserver;
 import java.util.HashMap;
 
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;

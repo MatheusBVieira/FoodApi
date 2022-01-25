@@ -1,10 +1,10 @@
-package com.example.food.auth.core;
+package com.example.foodapi.core.security.authorizationserver;
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
-import com.example.food.auth.domain.Usuario;
+import com.example.foodapi.domain.model.Usuario;
 
 import lombok.Getter;
 

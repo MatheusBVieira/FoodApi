@@ -1,4 +1,4 @@
-package com.example.food.auth.core;
+package com.example.foodapi.core.security.authorizationserver;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -11,8 +11,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.food.auth.domain.Usuario;
-import com.example.food.auth.domain.UsuarioRepository;
+import com.example.foodapi.domain.model.Usuario;
+import com.example.foodapi.domain.repository.UsuarioRepository;
 
 @Service
 public class JpaUserDetailsService implements UserDetailsService {
