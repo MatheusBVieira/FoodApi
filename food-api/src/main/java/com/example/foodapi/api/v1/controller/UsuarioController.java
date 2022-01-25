@@ -24,6 +24,7 @@ import com.example.foodapi.api.v1.model.request.UsuarioComSenhaRequest;
 import com.example.foodapi.api.v1.model.request.UsuarioRequest;
 import com.example.foodapi.api.v1.model.response.UsuarioResponse;
 import com.example.foodapi.api.v1.openapi.controller.UsuarioControllerOpenApi;
+import com.example.foodapi.core.security.CheckSecurity;
 import com.example.foodapi.domain.model.Usuario;
 import com.example.foodapi.domain.repository.UsuarioRepository;
 import com.example.foodapi.domain.service.UsuarioService;
@@ -44,6 +45,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
     @Autowired
     private UsuarioRequestDissasembler usuarioRequestDisassembler;
     
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @Override
 	@GetMapping
     public CollectionModel<UsuarioResponse> listar() {
@@ -52,6 +54,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
         return usuarioResponseAssembler.toCollectionModel(todasUsuarios);
     }
     
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @Override
 	@GetMapping("/{usuarioId}")
     public UsuarioResponse buscar(@PathVariable Long usuarioId) {
@@ -60,6 +63,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
         return usuarioResponseAssembler.toModel(usuario);
     }
     
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @Override
 	@PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -70,6 +74,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
         return usuarioResponseAssembler.toModel(usuario);
     }
     
+    @CheckSecurity.UsuariosGruposPermissoes.PodeAlterarUsuario
     @Override
 	@PutMapping("/{usuarioId}")
     public UsuarioResponse atualizar(@PathVariable Long usuarioId,
@@ -81,6 +86,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
         return usuarioResponseAssembler.toModel(usuarioAtual);
     }
     
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @Override
 	@PutMapping("/{usuarioId}/senha")
     @ResponseStatus(HttpStatus.NO_CONTENT)

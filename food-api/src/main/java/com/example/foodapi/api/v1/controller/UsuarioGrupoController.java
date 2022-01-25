@@ -17,6 +17,7 @@ import com.example.foodapi.api.v1.AlgaLinks;
 import com.example.foodapi.api.v1.assembler.GrupoResponseAssembler;
 import com.example.foodapi.api.v1.model.response.GrupoResponse;
 import com.example.foodapi.api.v1.openapi.controller.UsuarioGrupoControllerOpenApi;
+import com.example.foodapi.core.security.CheckSecurity;
 import com.example.foodapi.domain.model.Usuario;
 import com.example.foodapi.domain.service.UsuarioService;
 
@@ -33,6 +34,7 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
     @Autowired
     private GrupoResponseAssembler grupoResponseAssembler;
     
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @Override
     @GetMapping
     public CollectionModel<GrupoResponse> listar(@PathVariable Long usuarioId) {
@@ -50,6 +52,7 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
         return gruposModel;
     }
     
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @Override
 	@DeleteMapping("/{grupoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -59,6 +62,7 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
         return ResponseEntity.noContent().build();
     }
     
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @Override
 	@PutMapping("/{grupoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

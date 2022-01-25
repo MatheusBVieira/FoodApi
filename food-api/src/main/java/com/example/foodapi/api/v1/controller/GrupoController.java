@@ -23,6 +23,7 @@ import com.example.foodapi.api.v1.assembler.GrupoResponseAssembler;
 import com.example.foodapi.api.v1.model.request.GrupoRequest;
 import com.example.foodapi.api.v1.model.response.GrupoResponse;
 import com.example.foodapi.api.v1.openapi.controller.GrupoControllerOpenApi;
+import com.example.foodapi.core.security.CheckSecurity;
 import com.example.foodapi.domain.model.Grupo;
 import com.example.foodapi.domain.repository.GrupoRepository;
 import com.example.foodapi.domain.service.GrupoService;
@@ -43,6 +44,7 @@ public class GrupoController implements GrupoControllerOpenApi {
     @Autowired
     private GrupoRequestDissasember grupoRequestDisassembler;
     
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @Override
     @GetMapping
     public CollectionModel<GrupoResponse> listar() {
@@ -51,6 +53,7 @@ public class GrupoController implements GrupoControllerOpenApi {
         return grupoResponseAssembler.toCollectionModel(todosGrupos);
     }
     
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @Override
 	@GetMapping("/{grupoId}")
     public GrupoResponse buscar(@PathVariable Long grupoId) {
@@ -59,6 +62,7 @@ public class GrupoController implements GrupoControllerOpenApi {
         return grupoResponseAssembler.toModel(grupo);
     }
     
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @Override
 	@PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -70,6 +74,7 @@ public class GrupoController implements GrupoControllerOpenApi {
         return grupoResponseAssembler.toModel(grupo);
     }
     
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @Override
 	@PutMapping("/{grupoId}")
     public GrupoResponse atualizar(@PathVariable Long grupoId,
@@ -83,6 +88,7 @@ public class GrupoController implements GrupoControllerOpenApi {
         return grupoResponseAssembler.toModel(grupoAtual);
     }
     
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @Override
 	@DeleteMapping("/{grupoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

@@ -17,6 +17,7 @@ import com.example.foodapi.api.v1.AlgaLinks;
 import com.example.foodapi.api.v1.assembler.PermissaoResponseAssembler;
 import com.example.foodapi.api.v1.model.response.PermissaoResponse;
 import com.example.foodapi.api.v1.openapi.controller.GrupoPermissaoControllerOpenApi;
+import com.example.foodapi.core.security.CheckSecurity;
 import com.example.foodapi.domain.model.Grupo;
 import com.example.foodapi.domain.service.GrupoService;
 
@@ -33,6 +34,7 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
 	@Autowired
 	private PermissaoResponseAssembler permissaoResponseAssembler;
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
 	@Override
 	@GetMapping
 	public CollectionModel<PermissaoResponse> listar(@PathVariable Long grupoId) {
@@ -52,6 +54,7 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
 	    return permissoesModel;
 	}    
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	@Override
 	@DeleteMapping("/{permissaoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
@@ -61,6 +64,7 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
 		return ResponseEntity.noContent().build();
 	}
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	@Override
 	@PutMapping("/{permissaoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
