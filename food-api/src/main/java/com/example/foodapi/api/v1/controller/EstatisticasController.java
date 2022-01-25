@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.foodapi.api.v1.AlgaLinks;
 import com.example.foodapi.api.v1.openapi.controller.EstatisticasControllerOpenApi;
+import com.example.foodapi.core.security.CheckSecurity;
 import com.example.foodapi.domain.filter.VendaDiariaFilter;
 import com.example.foodapi.domain.model.dto.VendaDiaria;
 import com.example.foodapi.domain.service.VendaQueryService;
@@ -32,6 +33,7 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
 	@Autowired
 	private VendaReportService vendaReportService;
 	
+	@CheckSecurity.Estatisticas.PodeConsultar
 	@Override
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public EstatisticasResponse estatisticas() {
@@ -42,6 +44,7 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
 	    return estatisticasModel;
 	}
 	
+	@CheckSecurity.Estatisticas.PodeConsultar
 	@Override
 	@GetMapping(path = "/vendas-diarias", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<VendaDiaria> consultarVendasDiarias(VendaDiariaFilter filtro,
@@ -49,6 +52,7 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
 		return vendaQueryService.consultarVendasDiarias(filtro, timeOffset);
 	}
 	
+	@CheckSecurity.Estatisticas.PodeConsultar
 	@Override
 	@GetMapping(path = "/vendas-diarias", produces = MediaType.APPLICATION_PDF_VALUE)
 	public ResponseEntity<byte[]> consultarVendasDiariasPdf(VendaDiariaFilter filtro,
