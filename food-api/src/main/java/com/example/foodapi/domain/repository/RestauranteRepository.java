@@ -15,11 +15,6 @@ import com.example.foodapi.domain.model.Restaurante;
 public interface RestauranteRepository extends CustomJpaRepository<Restaurante, Long>, RestauranteRepositoryQueries,
 		JpaSpecificationExecutor<Restaurante> {
 
-	// Errata: se um restaurante não tiver nenhuma forma de pagamento associada a
-	// ele,
-	// esse restaurante não será retornado usando JOIN FETCH r.formasPagamento.
-	// Para resolver isso, temos que usar LEFT JOIN FETCH r.formasPagamento
-//		@Query("from Restaurante r join fetch r.cozinha join fetch r.formasPagamento")
 	@Override
 	@Query("from Restaurante r join fetch r.cozinha left join fetch r.formasPagamento")
 	List<Restaurante> findAll();
@@ -37,4 +32,10 @@ public interface RestauranteRepository extends CustomJpaRepository<Restaurante, 
 
 	int countByCozinhaId(Long cozinha);
 
+	@Query("select case when count(1) > 0 then true else false end "
+			+ "from Restaurante rest "
+			+ "join rest.responsaveis resp "
+			+ "where rest.id = :restauranteId "
+			+ "and resp.id = :usuarioId")
+	boolean existsResponsavel(Long restauranteId, Long usuarioId);
 }
