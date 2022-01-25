@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.example.foodapi.api.v1.AlgaLinks;
 import com.example.foodapi.api.v1.controller.RestauranteController;
 import com.example.foodapi.api.v1.model.response.RestauranteApenasNomeResponse;
+import com.example.foodapi.core.security.AlgaSecurity;
 import com.example.foodapi.domain.model.Restaurante;
 
 @Component
@@ -21,6 +22,9 @@ public class RestauranteApenasNomeResponseAssembler
     @Autowired
     private AlgaLinks algaLinks;
     
+    @Autowired
+    private AlgaSecurity algaSecurity;
+    
     public RestauranteApenasNomeResponseAssembler() {
         super(RestauranteController.class, RestauranteApenasNomeResponse.class);
     }
@@ -32,14 +36,21 @@ public class RestauranteApenasNomeResponseAssembler
         
         modelMapper.map(restaurante, restauranteModel);
         
-        restauranteModel.add(algaLinks.linkToRestaurantes("restaurantes"));
+        if (algaSecurity.podeConsultarRestaurantes()) {
+            restauranteModel.add(algaLinks.linkToRestaurantes("restaurantes"));
+        }
         
         return restauranteModel;
     }
-    
+
     @Override
     public CollectionModel<RestauranteApenasNomeResponse> toCollectionModel(Iterable<? extends Restaurante> entities) {
-        return super.toCollectionModel(entities)
-                .add(algaLinks.linkToRestaurantes());
+        CollectionModel<RestauranteApenasNomeResponse> collectionModel = super.toCollectionModel(entities);
+        
+        if (algaSecurity.podeConsultarRestaurantes()) {
+            collectionModel.add(algaLinks.linkToRestaurantes());
+        }
+                
+        return collectionModel;
     }   
 }

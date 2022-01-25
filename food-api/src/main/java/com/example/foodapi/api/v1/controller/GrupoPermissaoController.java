@@ -17,6 +17,7 @@ import com.example.foodapi.api.v1.AlgaLinks;
 import com.example.foodapi.api.v1.assembler.PermissaoResponseAssembler;
 import com.example.foodapi.api.v1.model.response.PermissaoResponse;
 import com.example.foodapi.api.v1.openapi.controller.GrupoPermissaoControllerOpenApi;
+import com.example.foodapi.core.security.AlgaSecurity;
 import com.example.foodapi.core.security.CheckSecurity;
 import com.example.foodapi.domain.model.Grupo;
 import com.example.foodapi.domain.service.GrupoService;
@@ -34,6 +35,9 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
 	@Autowired
 	private PermissaoResponseAssembler permissaoResponseAssembler;
 	
+	@Autowired
+	private AlgaSecurity algaSecurity; 
+	
 	@CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
 	@Override
 	@GetMapping
@@ -42,17 +46,21 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
 	    
 	    CollectionModel<PermissaoResponse> permissoesModel 
 	        = permissaoResponseAssembler.toCollectionModel(grupo.getPermissoes())
-	            .removeLinks()
-	            .add(algaLinks.linkToGrupoPermissoes(grupoId))
-	            .add(algaLinks.linkToGrupoPermissaoAssociacao(grupoId, "associar"));
+	            .removeLinks();
 	    
-	    permissoesModel.getContent().forEach(permissaoModel -> {
-	        permissaoModel.add(algaLinks.linkToGrupoPermissaoDesassociacao(
-	                grupoId, permissaoModel.getId(), "desassociar"));
-	    });
+	    permissoesModel.add(algaLinks.linkToGrupoPermissoes(grupoId));
+	    
+	    if (algaSecurity.podeEditarUsuariosGruposPermissoes()) {
+	        permissoesModel.add(algaLinks.linkToGrupoPermissaoAssociacao(grupoId, "associar"));
+	    
+	        permissoesModel.getContent().forEach(permissaoModel -> {
+	            permissaoModel.add(algaLinks.linkToGrupoPermissaoDesassociacao(
+	                    grupoId, permissaoModel.getId(), "desassociar"));
+	        });
+	    }
 	    
 	    return permissoesModel;
-	}    
+	}   
 	
 	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	@Override
