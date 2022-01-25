@@ -24,6 +24,7 @@ import com.example.foodapi.api.v1.assembler.CidadeResponseAssembler;
 import com.example.foodapi.api.v1.model.request.CidadeRequest;
 import com.example.foodapi.api.v1.model.response.CidadeResponse;
 import com.example.foodapi.api.v1.openapi.controller.CidadeControllerOpenApi;
+import com.example.foodapi.core.security.CheckSecurity;
 import com.example.foodapi.domain.exception.EstadoNaoEncontradoException;
 import com.example.foodapi.domain.exception.NegocioException;
 import com.example.foodapi.domain.model.Cidade;
@@ -46,6 +47,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 	@Autowired
 	private CidadeRequestDisassembler cidadeInputDisassembler;
 
+	@CheckSecurity.Cidades.PodeConsultar
 	@Override
 	@GetMapping
 	public CollectionModel<CidadeResponse> listar() {
@@ -54,6 +56,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 		return cidadeResponseAssembler.toCollectionModel(todasCidades);
 	}
 
+	@CheckSecurity.Cidades.PodeConsultar
 	@Override
 	@GetMapping("/{cidadeId}")
 	public CidadeResponse buscar(@PathVariable Long cidadeId) {
@@ -62,6 +65,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 		return cidadeResponseAssembler.toModel(cidade);
 	}
 
+	@CheckSecurity.Cidades.PodeEditar
 	@Override
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
@@ -81,6 +85,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 		}
 	}
 
+	@CheckSecurity.Cidades.PodeEditar
 	@Override
 	@PutMapping("/{cidadeId}")
 	public CidadeResponse atualizar(@PathVariable Long cidadeId, @RequestBody @Valid CidadeRequest cidadeInput) {
@@ -97,6 +102,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 		}
 	}
 
+	@CheckSecurity.Cidades.PodeEditar
 	@Override
 	@DeleteMapping("/{cidadeId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)

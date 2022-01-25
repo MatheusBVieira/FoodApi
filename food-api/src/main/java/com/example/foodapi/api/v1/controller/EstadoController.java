@@ -23,6 +23,7 @@ import com.example.foodapi.api.v1.assembler.EstadoResponseAssembler;
 import com.example.foodapi.api.v1.model.request.EstadoRequest;
 import com.example.foodapi.api.v1.model.response.EstadoResponse;
 import com.example.foodapi.api.v1.openapi.controller.EstadoControllerOpenApi;
+import com.example.foodapi.core.security.CheckSecurity;
 import com.example.foodapi.domain.model.Estado;
 import com.example.foodapi.domain.repository.EstadoRepository;
 import com.example.foodapi.domain.service.EstadoService;
@@ -43,6 +44,7 @@ public class EstadoController implements EstadoControllerOpenApi {
 	@Autowired
 	private EstadoRequestDisassembler estadoRequestDisassembler;
 	
+	@CheckSecurity.Estados.PodeConsultar
 	@Override
 	@GetMapping
 	public CollectionModel<EstadoResponse> listar() {
@@ -51,6 +53,7 @@ public class EstadoController implements EstadoControllerOpenApi {
 		return estadoResponseAssembler.toCollectionModel(todosEstados);
 	}
 	
+	@CheckSecurity.Estados.PodeConsultar
 	@Override
 	@GetMapping("/{estadoId}")
 	public EstadoResponse buscar(@PathVariable Long estadoId) {
@@ -59,6 +62,7 @@ public class EstadoController implements EstadoControllerOpenApi {
 		return estadoResponseAssembler.toModel(estado);
 	}
 	
+	@CheckSecurity.Estados.PodeEditar
 	@Override
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
@@ -70,6 +74,7 @@ public class EstadoController implements EstadoControllerOpenApi {
 		return estadoResponseAssembler.toModel(estado);
 	}
 	
+	@CheckSecurity.Estados.PodeEditar
 	@Override
 	@PutMapping("/{estadoId}")
 	public EstadoResponse atualizar(@PathVariable Long estadoId,
@@ -83,6 +88,7 @@ public class EstadoController implements EstadoControllerOpenApi {
 		return estadoResponseAssembler.toModel(estadoAtual);
 	}
 	
+	@CheckSecurity.Estados.PodeEditar
 	@Override
 	@DeleteMapping("/{estadoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
