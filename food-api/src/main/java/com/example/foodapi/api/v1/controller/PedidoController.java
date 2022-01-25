@@ -30,6 +30,7 @@ import com.example.foodapi.api.v1.openapi.controller.PedidoControllerOpenApi;
 import com.example.foodapi.core.data.PageWrapper;
 import com.example.foodapi.core.data.PageableTranslator;
 import com.example.foodapi.core.security.AlgaSecurity;
+import com.example.foodapi.core.security.CheckSecurity;
 import com.example.foodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.example.foodapi.domain.exception.NegocioException;
 import com.example.foodapi.domain.filter.PedidoFilter;
@@ -78,6 +79,7 @@ public class PedidoController implements PedidoControllerOpenApi {
 		return pagedResourcesAssembler.toModel(pedidosPage, pedidoResumoResponseAssembler);
 	}
 
+	@CheckSecurity.Pedidos.PodeBuscar
 	@Override
 	@GetMapping("/{codigoPedido}")
 	public PedidoResponse buscar(@PathVariable String codigoPedido) {
