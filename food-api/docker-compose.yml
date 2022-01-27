@@ -10,7 +10,7 @@ services:
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     ports:
-      - "3306:3306"
+      - "13306:3306"
     networks:
       - algafood-network
       
@@ -26,6 +26,7 @@ services:
       DB_HOST: algafood-mysql
       SPRING_SESSION_STORE_TYPE: redis
       SPRING_REDIS_HOST: algafood-redis
+      SPRING_PROFILES_ACTIVE: dev
     networks:
       - algafood-network
     depends_on:
