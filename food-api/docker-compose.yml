@@ -23,7 +23,15 @@ services:
       - algafood-network
     depends_on:
       - algafood-mysql
-#    deploy:
-#      replicas: 2
+
+  algafood-proxy:
+    build: ./nginx
+    image: algafood-proxy
+    ports:
+      - "80:80"
+    networks:
+      - algafood-network
+    depends_on:
+      - algafood-api
 
     
