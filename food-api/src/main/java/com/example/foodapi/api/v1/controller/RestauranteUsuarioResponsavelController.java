@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.foodapi.api.v1.AlgaLinks;
 import com.example.foodapi.api.v1.assembler.UsuarioResponseAssembler;
 import com.example.foodapi.api.v1.model.response.UsuarioResponse;
+import com.example.foodapi.api.v1.openapi.controller.RestauranteUsuarioResponsavelControllerOpenApi;
 import com.example.foodapi.core.security.AlgaSecurity;
 import com.example.foodapi.core.security.CheckSecurity;
 import com.example.foodapi.domain.model.Restaurante;

@@ -2,7 +2,6 @@ package com.example.foodapi.api.v1.model.request;
 
 import javax.validation.constraints.NotBlank;
 
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,11 +9,9 @@ import lombok.Setter;
 @Getter
 public class SenhaRequest {
     
-	@ApiModelProperty(example = "123", required = true)
 	@NotBlank
 	private String senhaAtual;
 
-	@ApiModelProperty(example = "123", required = true)
 	@NotBlank
 	private String novaSenha;
 } 
