@@ -6,6 +6,8 @@ import com.example.foodapi.api.v1.model.request.CidadeRequest;
 import com.example.foodapi.api.v1.model.response.CidadeResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -17,16 +19,17 @@ public interface CidadeControllerOpenApi {
 	CollectionModel<CidadeResponse> listar();
 	
 	@Operation(summary = "Busca uma cidade por Id")
-	CidadeResponse buscar(Long cidadeId);
+	CidadeResponse buscar(@Parameter(description = "ID de uma cidade", example = "1", required = true) Long cidadeId);
 	
 	@Operation(summary = "Cadastra uma cidade", description = "Cadastro de uma cidade, " +
 			"necessita de um estado e um nome válido")
-	CidadeResponse adicionar(CidadeRequest cidadeRequest);
+	CidadeResponse adicionar(@RequestBody(description = "Representação de uma nova cidade", required = true) CidadeRequest cidadeRequest);
 
 	@Operation(summary = "Atualizado uma cidade por ID")
-	CidadeResponse atualizar(Long cidadeId,CidadeRequest cidadeRequest);
+	CidadeResponse atualizar(@Parameter(description = "ID de uma cidade", example = "1", required = true) Long cidadeId,
+			  @RequestBody(description = "Representação de uma cidade com dados atualizados", required = true) CidadeRequest cidadeRequest);
 	
 	@Operation(summary = "Excluir uma cidade por ID")
-	void remover(Long cidadeId);
+	void remover(@Parameter(description = "ID de uma cidade", example = "1", required = true) Long cidadeId);
 	
 }
