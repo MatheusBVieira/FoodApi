@@ -9,6 +9,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.foodapi.api.v1.model.request.FotoProdutoRequest;
 import com.example.foodapi.api.v1.model.response.FotoProdutoResponse;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
+@SecurityRequirement(name="security_auth")
 public interface RestauranteProdutoFotoControllerOpenApi {
 
 	FotoProdutoResponse atualizarFoto(Long restauranteId, Long produtoId, FotoProdutoRequest fotoProdutoRequest,

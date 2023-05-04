@@ -8,6 +8,9 @@ import com.example.foodapi.api.v1.model.response.PedidoResponse;
 import com.example.foodapi.api.v1.model.response.PedidoResumoResponse;
 import com.example.foodapi.domain.filter.PedidoFilter;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
+@SecurityRequirement(name="security_auth")
 public interface PedidoControllerOpenApi {
 
 	PagedModel<PedidoResumoResponse> pesquisar(PedidoFilter filtro, Pageable pageable);

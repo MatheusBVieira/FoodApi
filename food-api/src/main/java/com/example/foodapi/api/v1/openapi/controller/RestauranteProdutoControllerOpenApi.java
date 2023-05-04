@@ -5,6 +5,9 @@ import org.springframework.hateoas.CollectionModel;
 import com.example.foodapi.api.v1.model.request.ProdutoRequest;
 import com.example.foodapi.api.v1.model.response.ProdutoResponse;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
+@SecurityRequirement(name="security_auth")
 public interface RestauranteProdutoControllerOpenApi {
 
 	CollectionModel<ProdutoResponse> listar(Long restauranteId, Boolean incluirInativos);
