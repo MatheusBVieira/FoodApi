@@ -37,7 +37,7 @@ public interface RestauranteProdutoFotoControllerOpenApi {
 
 	@Operation(summary = "Busca a foto do produto de um restaurante", responses = {
 			@ApiResponse(responseCode = "200", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = FotoProdutoModel.class)),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = FotoProdutoResponse.class)),
 					@Content(mediaType = "image/jpeg", schema = @Schema(type = "string", format = "binary")),
 					@Content(mediaType = "image/png", schema = @Schema(type = "string", format = "binary"))
 			}),
