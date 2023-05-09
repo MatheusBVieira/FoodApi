@@ -23,6 +23,7 @@
 		<logback-ext-loggly.version>0.1.5</logback-ext-loggly.version>
 		<dockerfile-maven-version>1.4.13</dockerfile-maven-version>
 		<springdoc.version>1.6.9</springdoc.version>
+		<springauthserver.version>0.3.1</springauthserver.version>
 	</properties>
 
 	<dependencies>
@@ -204,6 +205,12 @@
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-security</artifactId>
 			<version>${springdoc.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-oauth2-authorization-server</artifactId>
+			<version>${springauthserver.version}</version>
 		</dependency>
 		
 	</dependencies>
