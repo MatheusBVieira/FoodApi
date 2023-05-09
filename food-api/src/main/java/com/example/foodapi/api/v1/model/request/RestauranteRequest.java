@@ -7,6 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,9 +15,11 @@ import lombok.Setter;
 @Getter
 public class RestauranteRequest {
 	
+	@Schema(example = "Thai Gourmet")
 	@NotBlank
 	private String nome;
 
+	@Schema(example = "12.00")
 	@NotNull
 	@PositiveOrZero
 	private BigDecimal taxaFrete;
