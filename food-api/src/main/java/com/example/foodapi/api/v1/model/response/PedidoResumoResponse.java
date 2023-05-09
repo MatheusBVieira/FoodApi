@@ -33,5 +33,8 @@ public class PedidoResumoResponse extends RepresentationModel<PedidoResumoRespon
 
 	@Schema(example = "2019-12-01T20:34:04Z")
 	private OffsetDateTime dataCriacao;
-	
+
+	private RestauranteApenasNomeResponse restaurante;
+    private UsuarioResponse cliente;
+    
 }

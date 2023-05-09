@@ -23,4 +23,5 @@ public class EnderecoResponse {
 	@Schema(example = "Centro")
 	private String bairro;
 	
+	private CidadeResumoResponse cidade;
 }
